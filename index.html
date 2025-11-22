@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luisa Cáceres de Arizmendi</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  /* ====== Overlay / panel ====== */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    background: rgba(10,20,50,0.7);
+    z-index: 60;
+    padding: 1.5rem;
+    overflow-y: auto;
+  }
+
+  .panel {
+    background: linear-gradient(180deg, #e8f1ff, #d7e6ff);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    max-width: 1100px;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+    color: #1e3a8a;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.45);
+    position: relative;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: #1e3a8a;
+    color: white;
+    padding: 0.5rem 0.75rem;
+    font-weight: bold;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  .close-btn:hover { background: #3b82f6; }
+
+  #panel-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+  }
+
+  #panel-content img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.3s;
+  }
+
+  #panel-content img:hover { transform: scale(1.05); }
+</style>
+</head>
+<body class="min-h-screen bg-gradient-to-b from-blue-950 via-blue-900 to-blue-800 text-blue-50 font-sans flex">
+
+
+
+ <!-- ====== Sidebar ====== -->
+  <aside class="w-64 bg-blue-950/70 backdrop-blur-md border-r border-blue-400/30 p-6 flex flex-col items-center shadow-xl">
+    <div class="w-32 h-32 overflow-hidden mb-6 rounded-full border-2 border-blue-300">
+      <img src="imagen1.jpg" alt="Logo Universidad" class="object-cover w-full h-full">
+    </div>
+    <nav class="flex flex-col gap-4 text-blue-100 w-full text-center">
+      <a href="#inicio" class="py-2 rounded-lg hover:bg-blue-500/40 transition">Inicio</a>
+      <a href="#informacion" class="py-2 rounded-lg hover:bg-blue-500/40 transition">Información</a>
+      <a href="#introduccion" class="py-2 rounded-lg hover:bg-blue-500/40 transition">Introducción</a>
+      <a href="#computadoras" class="py-2 rounded-lg hover:bg-blue-500/40 transition">Computadoras</a>
+      <a href="#mantenimiento" class="py-2 rounded-lg hover:bg-blue-500/40 transition">Pasos de mantenimiento</a>
+      <a href="#desarrolladores" class="py-2 rounded-lg hover:bg-blue-500/40 transition">Desarrolladores</a>
+    </nav>
+  </aside>
+
+  <!-- ====== Contenido principal ====== -->
+  <div class="flex-1 py-12 px-10">
+
+    <!-- ====== Header con fondo animado ====== -->
+<header class="relative w-full h-52 md:h-64 rounded-xl overflow-hidden mb-10 border border-blue-400/30 shadow-xl">
+
+<section id="inicio" class="mb-10 relative w-full h-64 md:h-96 rounded-xl overflow-hidden">
+  <!-- Carrusel de fondo -->
+  <img src="COMUNIDAD1.jpg" class="carousel-img absolute inset-0 w-full h-full object-cover active">
+  <img src="COMUNIDAD2.jpg" class="carousel-img absolute inset-0 w-full h-full object-cover">
+  <img src="COMUNIDAD3.jpg" class="carousel-img absolute inset-0 w-full h-full object-cover">
+
+  <!-- Capa oscura -->
+  <div class="absolute inset-0 bg-black/40"></div>
+
+<!-- Logo encima cuadrado sin borde -->
+<div class="absolute top-4 left-4 w-24 h-24 md:w-32 md:h-32 z-20 overflow-hidden shadow-lg">
+  <img src="luisa caseres.png" alt="Logo" class="w-full h-full object-cover">
+</div>
+
+
+
+  <!-- Texto encima -->
+  <div class="absolute inset-0 flex items-center justify-center z-20">
+    <h1 class="text-3xl md:text-5xl font-extrabold text-white drop-shadow-lg text-center">
+      Comunidad Luisa Cáceres de Arizmendi
+    </h1>
+  </div>
+</section>
+
+<style>
+.carousel-img {
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  z-index: 0;
+}
+
+.carousel-img.active {
+  opacity: 1;
+  z-index: 1;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const imgs = document.querySelectorAll('#inicio .carousel-img');
+  let i = 0;
+  setInterval(() => {
+    imgs[i].classList.remove('active');
+    i = (i + 1) % imgs.length;
+    imgs[i].classList.add('active');
+  }, 5000);
+});
+</script>
+
+
+  <!-- Capa oscura para que el texto resalte -->
+  <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+
+  <!-- Contenido del header -->
+  <div class="relative z-10 h-full flex items-center gap-6 px-8">
+    <img src="luisa caseres.png" alt="Logo Comunidad" class="w-32 h-32 md:w-40 md:h-40 shadow-lg rounded-xl border border-blue-200">
+    <div>
+      <h1 class="text-4xl font-extrabold tracking-tight text-blue-50 drop-shadow-md">
+        Luisa Cáceres de Arizmendi
+      </h1>
+      <p class="mt-2 text-blue-200/90">
+        Comunidad para compartir, aprender y crear juntos.
+      </p>
+    </div>
+  </div>
+
+</header>
+
+   <!-- ====== Inicio ====== -->
+<section id="inicio" class="bg-blue-100/10 backdrop-blur-lg rounded-2xl shadow-xl p-10 mb-10 border border-blue-300/40 hover:scale-[1.02] transition">
+  <div class="grid md:grid-cols-2 gap-8 items-center">
+    <div>
+      <h2 class="text-3xl font-semibold mb-3 text-blue-100">Bienvenido a Luisa Cáceres de Arizmendi</h2>
+      <p class="text-blue-200 mb-5">Conecta con personas que comparten tus intereses, participa en proyectos y contribuye a un futuro más innovador.</p>
+      <a href="#informacion" class="inline-block px-6 py-3 rounded-xl bg-gradient-to-r from-blue-300 to-blue-400 hover:from-blue-400 hover:to-blue-500 text-blue-950 font-semibold shadow-lg transition">Más información</a>
+    </div>
+    <div class="rounded-xl overflow-hidden border border-blue-300/30">
+      <img src="imagenespc_inicio.jpg" alt="Imagen de bienvenida" class="w-full h-full object-cover">
+    </div>
+  </div>
+</section>
+
+
+<!-- ====== Información ====== -->
+    <section id="informacion" class="mb-10">
+      <h3 class="text-2xl font-semibold mb-4 text-blue-100">Información</h3>
+      <div class="space-y-6">
+        <article class="p-5 bg-gradient-to-r from-blue-100/20 to-blue-200/10 border border-blue-300 rounded-xl shadow-lg">
+          <h4 class="font-medium text-blue-100">Misión</h4>
+          <p class="mt-2 text-blue-200">Formar nuevos(as) republicanos(as) humanistas, socialmente conscientes y comprometidos con el momento histórico coyuntural del país, integrados(as) de forma productiva a la vida útil en su comunidad, explotando la creatividad y la innovación para el fortalecimiento de los valores y la relación escuela, familia y comunidad.</p>
+        </article>
+        <article class="p-5 bg-gradient-to-r from-blue-100/20 to-blue-200/10 border border-blue-300 rounded-xl shadow-lg">
+          <h4 class="font-medium text-blue-100">Visión</h4>
+          <p class="mt-2 text-blue-200">Lograr transformar y potenciar la escuela hacia la educación liberadora con la participación protagónica y consciente del sentido de corresponsabilidad entre toda la comunidad educativa para el desarrollo social como un todo.</p>
+        </article>
+        <article class="p-5 bg-gradient-to-r from-blue-100/20 to-blue-200/10 border border-blue-300 rounded-xl shadow-lg">
+          <h4 class="font-medium text-blue-100">Reseña Histórica</h4>
+          <p class="mt-2 text-blue-200">La Escuela Básica Nacional "Luisa Cáceres de Arismendi" ubicada en Ciudad Socialista "La Mora" fue fundada el 04 de Octubre del 2016 y la historicidad que dio origen al "Epónimo" que lleva por nombre, fue seleccionado a través de la consulta popular comunitaria realizada el 10 de marzo del 2016, de la cual por decisión se tomó que la institución llevase el nombre de "Luisa Cáceres de Arismendi" por ser la heroína más representativa del género femenino e insigne de la historia de la gesta de la independencia Venezolana.</p>
+        </article>
+        <article class="p-5 bg-gradient-to-r from-blue-100/20 to-blue-200/10 border border-blue-300 rounded-xl shadow-lg">
+          <h4 class="font-medium text-blue-100">Ubicación</h4>
+          <p class="mt-2 text-blue-200">Aragua, la Victoria, Ciudad Socialista “La Mora”.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- ====== Introducción al mantenimiento ====== -->
+    <section id="introduccion" class="mb-10 bg-blue-100/10 backdrop-blur-md border border-blue-300/40 rounded-2xl shadow-xl p-8">
+      <h3 class="text-2xl font-semibold mb-6 text-blue-100">Introducción al Mantenimiento</h3>
+      <p class="text-blue-200 mb-4">
+        El mantenimiento informático es un proceso fundamental que busca garantizar el correcto funcionamiento, rendimiento y durabilidad de los equipos de cómputo.
+        Permite prevenir fallas, mejorar el rendimiento de los sistemas y optimizar los recursos disponibles en la institución educativa.
+      </p>
+      <h4 class="text-xl font-medium text-blue-100 mt-6 mb-2">Tipos de mantenimiento</h4>
+      <ul class="list-disc ml-6 text-blue-200 space-y-2">
+        <li><strong>Preventivo:</strong> Se realiza periódicamente para evitar fallos futuros. Incluye limpieza física, revisión de cables, y actualización de software.</li>
+        <li><strong>Correctivo:</strong> Se lleva a cabo cuando un equipo presenta una falla. Consiste en reparar o sustituir los componentes dañados.</li>
+        <li><strong>Predictivo:</strong> Se basa en monitorear el estado de los equipos para anticipar posibles averías mediante herramientas de diagnóstico.</li>
+      </ul>
+      <h4 class="text-xl font-medium text-blue-100 mt-6 mb-2">Mantenimiento a realizar</h4>
+      <p class="text-blue-200 mb-4">
+        En esta práctica se ejecutará un mantenimiento <strong>preventivo y correctivo</strong> de los equipos de cómputo pertenecientes a la institución “Luisa Cáceres de Arizmendi”.
+        Se realizará limpieza interna y externa, revisión del hardware, reinstalación de sistemas operativos cuando sea necesario y verificación del correcto funcionamiento de los periféricos.
+      </p>
+      <h4 class="text-xl font-medium text-blue-100 mt-6 mb-2">Componentes del sistema</h4>
+      <ul class="list-disc ml-6 text-blue-200 space-y-2">
+        <li><strong>Hardware:</strong> Placa madre, procesador, memoria RAM, fuente de poder, discos duros, tarjetas gráficas, periféricos, etc.</li>
+        <li><strong>Software:</strong> Sistema operativo, controladores, aplicaciones de oficina, antivirus y programas educativos.</li>
+        <li><strong>Periféricos:</strong> Monitores, teclados, mouse, impresoras, y dispositivos de almacenamiento externo.</li>
+      </ul>
+    </section>
+
+    <!-- ====== Computadoras ====== -->
+    <section id="computadoras" class="mb-10">
+      <h3 class="text-2xl font-semibold mb-4 text-blue-100">Computadoras</h3>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-blue-200/10 border border-blue-300 rounded-xl shadow-lg overflow-hidden cursor-pointer hover:scale-[1.02] transition" onclick="openPanel('antes')">
+          <img src="pc7.jpg" class="w-full aspect-square object-cover">
+          <div class="px-4 py-3 text-blue-100 font-medium text-center bg-blue-900/60 hover:bg-blue-700/50 transition">Antes del mantenimiento</div>
+        </div>
+        <div class="bg-blue-200/10 border border-blue-300 rounded-xl shadow-lg overflow-hidden cursor-pointer hover:scale-[1.02] transition" onclick="openPanel('despues')">
+          <img src="computadoras-despues1.jpg" class="w-full aspect-square object-cover">
+          <div class="px-4 py-3 text-blue-100 font-medium text-center bg-blue-900/60 hover:bg-blue-700/50 transition">Después del mantenimiento</div>
+        </div>
+      </div>
+    </section>
+
+   <section id="mantenimiento" class="mb-10 bg-blue-100/10 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-blue-300/40">
+  <h3 class="text-2xl font-semibold mb-6 text-blue-100">Pasos para el mantenimiento de computadoras</h3>
+
+  <!-- Grid de pasos -->
+  <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
+      <p class="text-blue-200 font-medium">Paso 1: Desconexión y seguridad</p>
+      <p class="text-blue-200 text-sm mt-1">Apagar y desconectar el equipo de la corriente eléctrica.</p>
+    </div>
+    <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
+      <p class="text-blue-200 font-medium">Paso 2: Limpieza externa</p>
+      <p class="text-blue-200 text-sm mt-1">Retirar polvo y suciedad del exterior con paño seco.</p>
+    </div>
+    <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
+      <p class="text-blue-200 font-medium">Paso 3: Limpieza interna</p>
+      <p class="text-blue-200 text-sm mt-1">Abrir el gabinete y limpiar componentes utilizando aire comprimido.</p>
+    </div>
+    <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
+      <p class="text-blue-200 font-medium">Paso 4: Revisión del hardware</p>
+      <p class="text-blue-200 text-sm mt-1">Verificar RAM, cables, ventiladores y salud del disco.</p>
+    </div>
+    <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
+      <p class="text-blue-200 font-medium">Paso 5: Mantenimiento del software</p>
+      <p class="text-blue-200 text-sm mt-1">Actualizar sistema operativo, controladores y antivirus.</p>
+    </div>
+    <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
+      <p class="text-blue-200 font-medium">Paso 6: Pruebas finales</p>
+      <p class="text-blue-200 text-sm mt-1">Encender el equipo y comprobar su correcto funcionamiento.</p>
+    </div>
+  </div>
+
+<!-- Herramientas utilizadas -->
+<h3 class="text-2xl font-semibold mt-10 mb-6 text-blue-100">Herramientas básicas para el buen mantenimiento a las PC</h3>
+<div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
+    <p class="text-blue-200 font-medium">Aire comprimido</p>
+    <p class="text-blue-200 text-sm mt-1">Se utiliza para limpiar polvo y suciedad interna de los componentes. Parte de las herramientas de limpieza junto con alcohol isopropílico, hisopos de algodón y paños de microfibra.</p>
+  </div>
+  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
+    <p class="text-blue-200 font-medium">Destornilladores</p>
+    <p class="text-blue-200 text-sm mt-1">Permiten desmontar y ajustar piezas del hardware. Ideal contar con un kit de destornilladores completo para diferentes tipos de tornillos.</p>
+  </div>
+  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
+    <p class="text-blue-200 font-medium">Pinceles antiestáticos</p>
+    <p class="text-blue-200 text-sm mt-1">Ayudan a limpiar superficies delicadas sin generar electricidad estática. Muy útiles junto con brochas antiestáticas para limpiar componentes internos.</p>
+  </div>
+  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
+    <p class="text-blue-200 font-medium">Alcohol isopropílico</p>
+    <p class="text-blue-200 text-sm mt-1">Se utiliza para limpiar contactos y componentes electrónicos sin dañarlos. Funciona junto con hisopos de algodón y paños de microfibra para un mantenimiento seguro.</p>
+  </div>
+  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
+    <p class="text-blue-200 font-medium">Multímetro</p>
+    <p class="text-blue-200 text-sm mt-1">Permite medir voltaje, corriente y continuidad de los componentes eléctricos, garantizando que todo funcione correctamente.</p>
+  </div>
+  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
+    <p class="text-blue-200 font-medium">Software de diagnóstico</p>
+    <p class="text-blue-200 text-sm mt-1">Sirve para revisar la salud del hardware y detectar fallas del sistema. También puede complementar el mantenimiento físico asegurando un funcionamiento óptimo.</p>
+  </div>
+  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
+    <p class="text-blue-200 font-medium">Pulsera antiestática y pasta térmica</p>
+    <p class="text-blue-200 text-sm mt-1">La pulsera antiestática protege los componentes internos al manipularlos, mientras que la pasta térmica garantiza una correcta disipación del calor del procesador.</p>
+  </div>
+  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
+    <p class="text-blue-200 font-medium">Paños de microfibra adicionales</p>
+    <p class="text-blue-200 text-sm mt-1">Se utilizan para limpiar superficies externas y pantallas sin rayarlas, complementando el kit de limpieza para pantallas.</p>
+  </div>
+  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
+    <p class="text-blue-200 font-medium">Kit de limpieza para teclados y pantallas</p>
+    <p class="text-blue-200 text-sm mt-1">Incluye hisopos, paños de microfibra y productos específicos para limpiar teclados, monitores y superficies externas de manera segura.</p>
+  </div>
+</div>
+
+
+</section>
+
+
+<!-- ====== Contenedor para dos videos ====== -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+
+  <!-- ====== Video local de ejemplo (más pequeño) ====== -->
+  <div class="bg-blue-100/10 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-blue-300/40">
+    <h3 class="text-xl font-semibold mb-4 text-blue-100">Ejemplo práctico 1</h3>
+    <div class="rounded-xl overflow-hidden border border-blue-300 shadow-md">
+      <video controls class="w-full rounded-xl">
+        <source src="videos/mantenimiento.mp4" type="video/mp4">
+        Tu navegador no soporta la reproducción de videos.
+      </video>
+    </div>
+  </div>
+
+  <!-- ====== Espacio para segundo video o contenido ====== -->
+  <div class="bg-blue-100/10 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-blue-300/40">
+    <h3 class="text-xl font-semibold mb-4 text-blue-100">Ejemplo práctico 2 a seguir</h3>
+    <div class="rounded-xl overflow-hidden border border-blue-300 shadow-md">
+      <!-- Aquí puedes poner otro video -->
+      <video controls class="w-full rounded-xl">
+        <source src="videos/otro_video.mp4" type="video/mp4">
+        Tu navegador no soporta la reproducción de videos.
+      </video>
+    </div>
+  </div>
+</section>
+
+<!-- ====== BOTÓN DEL GLOSARIO ====== -->
+<div class="w-full flex justify-center my-10">
+  <button onclick="document.getElementById('glosario').classList.toggle('hidden')" 
+    class="w-full md:w-2/3 lg:w-1/2 py-5 bg-blue-600 text-white text-2xl font-bold rounded-2xl shadow-xl hover:bg-blue-500 transition">
+    Glosario Informático
+  </button>
+</div>
+
+<!-- ====== PANEL DEL GLOSARIO ====== -->
+<section id="glosario" class="hidden bg-white/10 backdrop-blur-lg border border-blue-300 rounded-2xl p-6 text-blue-100 shadow-xl">
+
+  <h2 class="text-3xl font-bold mb-6 text-center">Glosario Informático</h2>
+
+  <div class="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 mb-6">
+    <!-- letras A-Z -->
+    <button onclick="showGlossary('A')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">A</button>
+    <button onclick="showGlossary('B')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">B</button>
+    <button onclick="showGlossary('C')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">C</button>
+    <button onclick="showGlossary('D')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">D</button>
+    <button onclick="showGlossary('E')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">E</button>
+    <button onclick="showGlossary('F')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">F</button>
+    <button onclick="showGlossary('G')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">G</button>
+    <button onclick="showGlossary('H')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">H</button>
+    <button onclick="showGlossary('I')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">I</button>
+    <button onclick="showGlossary('J')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">J</button>
+    <button onclick="showGlossary('K')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">K</button>
+    <button onclick="showGlossary('L')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">L</button>
+    <button onclick="showGlossary('M')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">M</button>
+    <button onclick="showGlossary('N')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">N</button>
+    <button onclick="showGlossary('O')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">O</button>
+    <button onclick="showGlossary('P')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">P</button>
+    <button onclick="showGlossary('Q')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">Q</button>
+    <button onclick="showGlossary('R')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">R</button>
+    <button onclick="showGlossary('S')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">S</button>
+    <button onclick="showGlossary('T')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">T</button>
+    <button onclick="showGlossary('U')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">U</button>
+    <button onclick="showGlossary('V')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">V</button>
+    <button onclick="showGlossary('W')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">W</button>
+    <button onclick="showGlossary('X')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">X</button>
+    <button onclick="showGlossary('Y')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">Y</button>
+    <button onclick="showGlossary('Z')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">Z</button>
+  </div>
+
+  <!-- Contenedor de información -->
+  <div id="glosario-info" class="p-4 bg-blue-900/40 rounded-xl border border-blue-300 text-blue-100">
+    <h3 class="text-xl font-bold">Selecciona una letra</h3>
+    <p class="text-sm mt-2">Toca una letra del glosario para ver los términos correspondientes.</p>
+  </div>
+</section>
+
+
+    <!-- ====== Desarrolladores ====== -->
+    <section id="desarrolladores" class="bg-blue-100/10 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-blue-300/30 mb-10">
+      <h3 class="text-xl font-semibold mb-6 text-blue-100 text-center">Desarrolladores</h3>
+      <div class="grid md:grid-cols-3 gap-6 text-center">
+        <div class="p-4 bg-blue-200/10 rounded-xl border border-blue-300 shadow-md hover:scale-105 transition">
+          <img src="abraham.jpg" alt="Abraham Valdivia" class="w-32 h-32 mx-auto rounded-full object-cover mb-4 border border-blue-300 shadow-md">
+          <h4 class="text-blue-50 font-semibold">Abraham Valdivia</h4>
+          <p class="text-blue-200 text-sm italic">Estudiante de PNF de Informática, Trayecto I de la UPTA Federico Brito Figueroa.</p>
+        </div>
+        <div class="p-4 bg-blue-200/10 rounded-xl border border-blue-300 shadow-md hover:scale-105 transition">
+          <img src="ramces.jpg" alt="Ramces Colmenares" class="w-32 h-32 mx-auto rounded-full object-cover mb-4 border border-blue-300 shadow-md">
+          <h4 class="text-blue-50 font-semibold">Ramces Colmenares</h4>
+          <p class="text-blue-200 text-sm italic">Estudiante de PNF de Informática, Trayecto I de la UPTA Federico Brito Figueroa.</p>
+        </div>
+        <div class="p-4 bg-blue-200/10 rounded-xl border border-blue-300 shadow-md hover:scale-105 transition">
+          <img src="angel.jpg" alt="Ángel Velásquez" class="w-32 h-32 mx-auto rounded-full object-cover mb-4 border border-blue-300 shadow-md">
+          <h4 class="text-blue-50 font-semibold">Ángel Velásquez</h4>
+          <p class="text-blue-200 text-sm italic">Estudiante de PNF de Informática, Trayecto I de la UPTA Federico Brito Figueroa.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== Panel flotante (GALERÍA) ====== -->
+    <div id="overlay" class="overlay">
+      <div class="panel">
+        <div class="close-btn" onclick="closePanel()">✕</div>
+        <div id="panel-content"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+document.addEventListener('DOMContentLoaded', () => {
+
+  // Carrusel
+  const imgs = document.querySelectorAll('header .carousel-img');
+  let i = 0;
+  setInterval(() => {
+    imgs[i].classList.remove('active');
+    i = (i + 1) % imgs.length;
+    imgs[i].classList.add('active');
+  }, 4000);
+
+  // Contenido de las computadoras
+  const content = {
+    antes: Array.from({length:7}, (_,i)=>({
+      img: `computadoras-antes${i+1}.jpg`,
+      desc: `Computadora antes del mantenimiento #${i+1}`
+    })),
+    despues: Array.from({length:7}, (_,i)=>({
+      img: `computadoras-despues${i+1}.jpg`,
+      desc: `Computadora después del mantenimiento #${i+1}`
+    }))
+  };
+
+  // Abrir panel
+  window.openPanel = function(type) {
+    const container = document.getElementById('panel-content');
+    container.innerHTML = '';
+    content[type].forEach(c => {
+      const div = document.createElement('div');
+      div.classList.add('text-center');
+      div.innerHTML = `<img src="${c.img}" alt="${c.desc}"><p class="mt-1 text-blue-800 text-sm">${c.desc}</p>`;
+      container.appendChild(div);
+    });
+    document.getElementById('overlay').style.display = 'flex';
+  };
+
+  // Cerrar panel
+  window.closePanel = function() {
+    document.getElementById('overlay').style.display = 'none';
+  };
+
+});
+</script>
+
+<script>
+const glosarioData = {
+
+A: [
+  { titulo: "Almacenamiento", texto: "Componente donde se guardan archivos." },
+  { titulo: "Archivo", texto: "Conjunto de datos guardado con un nombre." },
+  { titulo: "Algoritmo", texto: "Secuencia de pasos para resolver un problema." },
+  { titulo: "API", texto: "Interfaz para conectar aplicaciones." },
+  { titulo: "Antivirus", texto: "Software que detecta y elimina amenazas." }
+],
+
+B: [
+  { titulo: "BIOS", texto: "Sistema básico de entrada y salida." },
+  { titulo: "Backup", texto: "Copia de seguridad de datos." },
+  { titulo: "Bit", texto: "Unidad mínima de información." },
+  { titulo: "Bluetooth", texto: "Tecnología de conexión inalámbrica." },
+  { titulo: "Boot", texto: "Proceso de arranque del sistema." }
+],
+
+C: [
+  { titulo: "CPU", texto: "Ejecuta instrucciones del sistema." },
+  { titulo: "Cache", texto: "Memoria rápida que acelera procesos." },
+  { titulo: "Computadora", texto: "Máquina que procesa información." },
+  { titulo: "Código Fuente", texto: "Instrucciones escritas en un lenguaje." },
+  { titulo: "Compilador", texto: "Programa que traduce código a ejecutable." }
+],
+
+D: [
+  { titulo: "Driver", texto: "Controlador que permite que el hardware funcione." },
+  { titulo: "Datos", texto: "Información que se procesa o almacena." },
+  { titulo: "DNS", texto: "Sistema que traduce nombres de dominio a IP." },
+  { titulo: "Depuración", texto: "Proceso de encontrar y corregir errores." },
+  { titulo: "Descarga", texto: "Transferencia de datos desde Internet al dispositivo." }
+],
+
+E: [
+  { titulo: "Ethernet", texto: "Conexión de red cableada." },
+  { titulo: "Editor", texto: "Programa para modificar texto o código." },
+  { titulo: "Email", texto: "Correo electrónico." },
+  { titulo: "Encriptación", texto: "Proceso de codificar información para seguridad." },
+  { titulo: "Error", texto: "Falla o problema en el sistema." }
+],
+
+F: [
+  { titulo: "Firewall", texto: "Sistema de seguridad que controla el tráfico de red." },
+  { titulo: "Firmware", texto: "Software básico integrado en hardware." },
+  { titulo: "Formato", texto: "Estructura o disposición de datos." },
+  { titulo: "Función", texto: "Bloque de código que realiza una tarea específica." },
+  { titulo: "Fuente de Poder", texto: "Suministra energía eléctrica a la computadora." }
+],
+
+G: [
+  { titulo: "GPU", texto: "Procesador gráfico encargado de imágenes y videos." },
+  { titulo: "Gestor de Archivos", texto: "Programa para organizar y manejar archivos." },
+  { titulo: "Gigabyte", texto: "Unidad de almacenamiento de datos." },
+  { titulo: "Grupo de Trabajo", texto: "Conjunto de computadoras en una red local." },
+  { titulo: "GUI", texto: "Interfaz gráfica de usuario." }
+],
+
+H: [
+  { titulo: "Hardware", texto: "Parte física de una computadora." },
+  { titulo: "HTML", texto: "Lenguaje de marcado para páginas web." },
+  { titulo: "HTTP", texto: "Protocolo para transferir información web." },
+  { titulo: "Host", texto: "Equipo que proporciona servicios en red." },
+  { titulo: "HDD", texto: "Disco duro tradicional de almacenamiento." }
+],
+
+I: [
+  { titulo: "IP", texto: "Dirección que identifica un dispositivo en la red." },
+  { titulo: "Interfaz", texto: "Medio por el cual el usuario interactúa con la computadora." },
+  { titulo: "Input", texto: "Entrada de datos hacia el sistema." },
+  { titulo: "Instalación", texto: "Proceso de añadir software al sistema." },
+  { titulo: "Internet", texto: "Red mundial de computadoras interconectadas." }
+],
+
+J: [
+  { titulo: "Java", texto: "Lenguaje de programación popular." },
+  { titulo: "JSON", texto: "Formato de intercambio de datos." },
+  { titulo: "Joystick", texto: "Dispositivo de control para juegos." },
+  { titulo: "JDK", texto: "Kit de desarrollo para Java." },
+  { titulo: "JPEG", texto: "Formato de imagen comprimida." }
+],
+
+K: [
+  { titulo: "Kernel", texto: "Núcleo del sistema operativo." },
+  { titulo: "Keylogger", texto: "Software que registra teclas presionadas." },
+  { titulo: "Kbps", texto: "Unidad de velocidad de transmisión de datos." },
+  { titulo: "Kickstart", texto: "Proceso de arranque de algunos sistemas Linux." },
+  { titulo: "Keyboard", texto: "Teclado de computadora." }
+],
+
+L: [
+  { titulo: "LAN", texto: "Red de área local." },
+  { titulo: "Linux", texto: "Sistema operativo de código abierto." },
+  { titulo: "Lenguaje de Programación", texto: "Sistema para crear software." },
+  { titulo: "Login", texto: "Proceso de acceso a un sistema." },
+  { titulo: "Link", texto: "Enlace que conecta páginas o recursos." }
+],
+
+M: [
+  { titulo: "Malware", texto: "Software malicioso." },
+  { titulo: "Modem", texto: "Dispositivo que conecta a Internet." },
+  { titulo: "Motherboard", texto: "Placa principal de la computadora." },
+  { titulo: "Megabyte", texto: "Unidad de almacenamiento de datos." },
+  { titulo: "Monitor", texto: "Pantalla de la computadora." }
+],
+
+N: [
+  { titulo: "Nodo", texto: "Punto de conexión en una red." },
+  { titulo: "Nombre de Dominio", texto: "Dirección legible de un sitio web." },
+  { titulo: "Networking", texto: "Conexión y gestión de redes." },
+  { titulo: "Navegador", texto: "Programa para visitar sitios web." },
+  { titulo: "Null", texto: "Valor vacío o inexistente en programación." }
+],
+
+O: [
+  { titulo: "OS", texto: "Sistema operativo." },
+  { titulo: "Open Source", texto: "Software de código abierto." },
+  { titulo: "Overclocking", texto: "Acelerar hardware más allá de lo recomendado." },
+  { titulo: "Online", texto: "Conectado a Internet." },
+  { titulo: "Output", texto: "Salida de datos del sistema." }
+],
+
+P: [
+  { titulo: "PHP", texto: "Lenguaje de programación para web." },
+  { titulo: "Puerto", texto: "Entrada o salida de comunicación en red." },
+  { titulo: "Ping", texto: "Prueba de conectividad en red." },
+  { titulo: "Python", texto: "Lenguaje de programación versátil." },
+  { titulo: "Patch", texto: "Actualización para corregir errores de software." }
+],
+
+Q: [
+  { titulo: "Query", texto: "Consulta a una base de datos." },
+  { titulo: "Queue", texto: "Cola de procesos o datos." },
+  { titulo: "QoS", texto: "Calidad de servicio en redes." },
+  { titulo: "Quark", texto: "Unidad elemental en física, usada a veces en informática teórica." },
+  { titulo: "QuickSort", texto: "Algoritmo de ordenamiento rápido." }
+],
+
+R: [
+  { titulo: "RAM", texto: "Memoria de acceso aleatorio." },
+  { titulo: "Router", texto: "Dispositivo que dirige tráfico de red." },
+  { titulo: "Root", texto: "Usuario con permisos máximos." },
+  { titulo: "Registro", texto: "Lugar donde se almacenan configuraciones." },
+  { titulo: "Runtime", texto: "Tiempo de ejecución de un programa." }
+],
+
+S: [
+  { titulo: "Software", texto: "Programas y aplicaciones." },
+  { titulo: "Servidor", texto: "Equipo que proporciona servicios en red." },
+  { titulo: "Script", texto: "Código que se ejecuta automáticamente." },
+  { titulo: "SSID", texto: "Nombre de la red Wi-Fi." },
+  { titulo: "Stack", texto: "Estructura de datos tipo pila." }
+],
+
+T: [
+  { titulo: "TCP/IP", texto: "Protocolos principales de Internet." },
+  { titulo: "Trojan", texto: "Malware que se oculta como software legítimo." },
+  { titulo: "Terminal", texto: "Interfaz de línea de comandos." },
+  { titulo: "Teclado", texto: "Dispositivo de entrada de texto." },
+  { titulo: "Token", texto: "Elemento de seguridad o autenticación." }
+],
+
+U: [
+  { titulo: "USB", texto: "Puerto universal para conectar dispositivos." },
+  { titulo: "URL", texto: "Dirección de un recurso web." },
+  { titulo: "Usuario", texto: "Persona que usa un sistema." },
+  { titulo: "UDP", texto: "Protocolo de comunicación de red." },
+  { titulo: "Ubuntu", texto: "Distribución de Linux." }
+],
+
+V: [
+  { titulo: "VPN", texto: "Red privada virtual." },
+  { titulo: "Virus", texto: "Programa que daña el sistema." },
+  { titulo: "Variable", texto: "Almacena datos en programación." },
+  { titulo: "Virtualización", texto: "Crear entornos virtuales de hardware." },
+  { titulo: "Vector", texto: "Estructura de datos lineal." }
+],
+
+W: [
+  { titulo: "Wi-Fi", texto: "Conexión inalámbrica a Internet." },
+  { titulo: "Windows", texto: "Sistema operativo de Microsoft." },
+  { titulo: "Web", texto: "Conjunto de sitios y servicios online." },
+  { titulo: "Widget", texto: "Elemento gráfico en aplicaciones." },
+  { titulo: "Worm", texto: "Malware que se propaga solo." }
+],
+
+X: [
+  { titulo: "XML", texto: "Lenguaje de marcado para datos." },
+  { titulo: "XSS", texto: "Vulnerabilidad de seguridad en web." },
+  { titulo: "Xen", texto: "Hipervisor para virtualización." },
+  { titulo: "Xbox", texto: "Consola de videojuegos." },
+  { titulo: "Xcode", texto: "Entorno de desarrollo para Apple." }
+],
+
+Y: [
+  { titulo: "Y2K", texto: "Problema de año 2000 en software antiguo." },
+  { titulo: "Yarn", texto: "Gestor de paquetes para Node.js." },
+  { titulo: "Yottabyte", texto: "Unidad de almacenamiento enorme." },
+  { titulo: "YAML", texto: "Formato de serialización de datos." },
+  { titulo: "YouTube", texto: "Plataforma de videos online." }
+],
+
+Z: [
+  { titulo: "Zip", texto: "Formato de compresión de archivos." },
+  { titulo: "Zebra", texto: "Marca de impresoras de códigos de barra." },
+  { titulo: "Zero-day", texto: "Vulnerabilidad desconocida en software." },
+  { titulo: "Zombie", texto: "Computadora comprometida en una botnet." },
+  { titulo: "Zoom", texto: "Aplicación de videollamadas." }
+]
+
+};
+
+</script>
+
+<script>
+function showGlossary(letra) {
+  const box = document.getElementById("glosario-info");
+
+  // Revisar si la letra tiene términos
+  if (glosarioData[letra] && glosarioData[letra].length > 0) {
+    let html = '';
+    glosarioData[letra].forEach(item => {
+      html += `
+        <h3 class="text-2xl font-bold mb-1">${item.titulo}</h3>
+        <p class="text-blue-200 mb-3">${item.texto}</p>
+      `;
+    });
+    box.innerHTML = html;
+  } else {
+    box.innerHTML = `
+      <h3 class="text-2xl font-bold mb-2">Sin información</h3>
+      <p class="text-blue-200">No hay datos para la letra <strong>${letra}</strong>.</p>
+    `;
+  }
+}
+</script>
+
+
+</body>
+</html>
+
+
