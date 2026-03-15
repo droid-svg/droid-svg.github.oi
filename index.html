@@ -5,708 +5,2011 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Luisa Cáceres de Arizmendi</title>
 <script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
-  /* ====== Overlay / panel ====== */
+  body {
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+  .serif {
+    font-family: 'Playfair Display', serif;
+  }
+  .tech {
+    font-family: 'Orbitron', monospace;
+  }
+  
+  /* ====== INTRO ANIMADA ====== */
+  #intro {
+    position: fixed;
+    inset: 0;
+    background: #020617;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  .intro-grid {
+    position: absolute;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridMove 20s linear infinite;
+  }
+  
+  @keyframes gridMove {
+    0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+    100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+  }
+  
+  .intro-logo {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    border: 3px solid #3b82f6;
+    box-shadow: 0 0 60px rgba(59, 130, 246, 0.5), inset 0 0 60px rgba(59, 130, 246, 0.2);
+    animation: pulse 2s ease-in-out infinite;
+    z-index: 10;
+    overflow: hidden;
+    background: rgba(30, 58, 138, 0.3);
+  }
+  
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 60px rgba(59, 130, 246, 0.5); }
+    50% { transform: scale(1.05); box-shadow: 0 0 100px rgba(59, 130, 246, 0.8); }
+  }
+  
+  .intro-text {
+    margin-top: 2rem;
+    font-size: 2.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.5em;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa, #93c5fd, #3b82f6);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textShine 3s linear infinite;
+    z-index: 10;
+  }
+  
+  @keyframes textShine {
+    0% { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+  }
+  
+  .loading-bar {
+    width: 300px;
+    height: 4px;
+    background: rgba(59, 130, 246, 0.2);
+    border-radius: 2px;
+    margin-top: 2rem;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .loading-progress {
+    height: 100%;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    width: 0%;
+    animation: load 3s ease-out forwards;
+    box-shadow: 0 0 20px #3b82f6;
+  }
+  
+  @keyframes load {
+    0% { width: 0%; }
+    100% { width: 100%; }
+  }
+  
+  .binary {
+    position: absolute;
+    font-family: 'Orbitron', monospace;
+    font-size: 14px;
+    color: rgba(59, 130, 246, 0.3);
+    animation: fall linear infinite;
+  }
+  
+  @keyframes fall {
+    to { transform: translateY(100vh); }
+  }
+  
+  .intro-hide {
+    animation: introOut 0.8s ease-in forwards;
+    animation-delay: 3s;
+  }
+  
+  @keyframes introOut {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.1); pointer-events: none; }
+  }
+  
+  /* ====== SIDEBAR COLAPSABLE ====== */
+  .sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100vh;
+    width: 80px;
+    background: rgba(2, 6, 23, 0.95);
+    backdrop-filter: blur(20px);
+    border-right: 1px solid rgba(59, 130, 246, 0.2);
+    z-index: 50;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+  }
+  
+  .sidebar.expanded {
+    width: 300px;
+  }
+  
+  .sidebar-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+    z-index: 60;
+    transition: all 0.3s;
+  }
+  
+  .sidebar-toggle:hover {
+    transform: scale(1.1);
+  }
+  
+  .sidebar-toggle span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: #60a5fa;
+    border-radius: 2px;
+    transition: all 0.3s;
+    box-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
+  }
+  
+  .sidebar.expanded .sidebar-toggle span:nth-child(1) {
+    transform: rotate(45deg) translate(6px, 6px);
+  }
+  
+  .sidebar.expanded .sidebar-toggle span:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .sidebar.expanded .sidebar-toggle span:nth-child(3) {
+    transform: rotate(-45deg) translate(6px, -6px);
+  }
+  
+  .sidebar-content {
+    padding: 100px 20px 20px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .sidebar.expanded .sidebar-content {
+    opacity: 1;
+  }
+  
+  .sidebar-logo-container {
+    width: 200px;
+    height: 200px;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 2px solid rgba(59, 130, 246, 0.5);
+    box-shadow: 0 0 40px rgba(59, 130, 246, 0.3);
+    margin-bottom: 30px;
+    position: relative;
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.8), rgba(15, 23, 42, 0.9));
+  }
+  
+  .sidebar-logo-container::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    background: linear-gradient(45deg, #3b82f6, #60a5fa, #93c5fd, #3b82f6);
+    border-radius: 22px;
+    z-index: -1;
+    animation: borderRotate 3s linear infinite;
+  }
+  
+  @keyframes borderRotate {
+    0% { filter: hue-rotate(0deg); }
+    100% { filter: hue-rotate(360deg); }
+  }
+  
+  .sidebar-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    padding: 10px;
+  }
+  
+  .sidebar-nav {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .sidebar-nav a {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px;
+    color: #93c5fd;
+    text-decoration: none;
+    border-radius: 12px;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .sidebar-nav a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, rgba(59, 130, 246, 0.3), transparent);
+    transition: width 0.3s;
+  }
+  
+  .sidebar-nav a:hover::before {
+    width: 100%;
+  }
+  
+  .sidebar-nav a:hover {
+    color: white;
+    transform: translateX(10px);
+  }
+  
+  .nav-icon {
+    width: 24px;
+    height: 24px;
+    min-width: 24px;
+  }
+  
+  .sidebar-collapsed-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    opacity: 1;
+    transition: opacity 0.3s;
+  }
+  
+  .sidebar.expanded .sidebar-collapsed-icon {
+    opacity: 0;
+    pointer-events: none;
+  }
+  
+  /* ====== CONTENIDO PRINCIPAL ====== */
+  .main-content {
+    margin-left: 80px;
+    transition: margin-left 0.4s;
+  }
+  
+  .sidebar.expanded ~ .main-content {
+    margin-left: 300px;
+  }
+  
+  /* ====== RESTO DE ESTILOS ====== */
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .glass-strong {
+    background: rgba(30, 58, 138, 0.4);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(147, 197, 253, 0.2);
+  }
+  
+  .hover-lift {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+  }
+  
+  .gradient-text {
+    background: linear-gradient(135deg, #93c5fd 0%, #60a5fa 50%, #3b82f6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
   .overlay {
     position: fixed;
     inset: 0;
     display: none;
     justify-content: center;
     align-items: center;
-    background: rgba(10,20,50,0.7);
+    background: rgba(2, 6, 23, 0.95);
+    backdrop-filter: blur(10px);
     z-index: 60;
     padding: 1.5rem;
     overflow-y: auto;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .overlay.active {
+    display: flex;
+    opacity: 1;
   }
 
   .panel {
-    background: linear-gradient(180deg, #e8f1ff, #d7e6ff);
-    padding: 1.5rem;
-    border-radius: 1rem;
-    max-width: 1100px;
+    background: linear-gradient(180deg, #f0f9ff, #e0f2fe);
+    padding: 2rem;
+    border-radius: 1.5rem;
+    max-width: 1200px;
     width: 95%;
     max-height: 90vh;
     overflow-y: auto;
     color: #1e3a8a;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.45);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     position: relative;
+    transform: scale(0.95);
+    transition: transform 0.3s;
+  }
+  
+  .overlay.active .panel {
+    transform: scale(1);
   }
 
   .close-btn {
     position: absolute;
-    top: 1rem;
-    right: 1rem;
+    top: 1.5rem;
+    right: 1.5rem;
     background: #1e3a8a;
     color: white;
-    padding: 0.5rem 0.75rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-weight: bold;
-    border-radius: 0.5rem;
+    border-radius: 50%;
     cursor: pointer;
-    transition: background 0.3s;
+    transition: all 0.3s;
+    z-index: 10;
   }
-  .close-btn:hover { background: #3b82f6; }
+  .close-btn:hover { 
+    background: #3b82f6; 
+    transform: rotate(90deg);
+  }
 
-  #panel-content {
+  .carousel-img {
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out, transform 6s ease;
+    z-index: 0;
+    transform: scale(1.1);
+  }
+
+  .carousel-img.active {
+    opacity: 1;
+    z-index: 1;
+    transform: scale(1);
+  }
+  
+  .decorative-line {
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #3b82f6, #60a5fa, #3b82f6, transparent);
+    border-radius: 2px;
+    margin: 2rem auto;
+    width: 60%;
+  }
+  
+  /* Galería de mantenimiento */
+  .maintenance-gallery {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
   }
-
-  #panel-content img {
+  
+  .maintenance-card {
+    position: relative;
+    border-radius: 1rem;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s;
+    border: 2px solid transparent;
+  }
+  
+  .maintenance-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    border-color: #3b82f6;
+    box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+  }
+  
+  .maintenance-card img {
     width: 100%;
-    aspect-ratio: 1/1;
+    height: 200px;
     object-fit: cover;
-    border-radius: 0.5rem;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    transition: transform 0.3s;
+    transition: transform 0.5s;
   }
-
-  #panel-content img:hover { transform: scale(1.05); }
+  
+  .maintenance-card:hover img {
+    transform: scale(1.1);
+  }
+  
+  .maintenance-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(30, 58, 138, 0.9), transparent);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  
+  .maintenance-card:hover .maintenance-overlay {
+    opacity: 1;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0f172a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #3b82f6;
+    border-radius: 5px;
+  }
+  
+  .fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 0;
+    }
+    .sidebar.expanded {
+      width: 100%;
+    }
+    .main-content {
+      margin-left: 0;
+    }
+    .sidebar.expanded ~ .main-content {
+      margin-left: 0;
+    }
+    .sidebar-toggle {
+      right: -50px;
+      background: rgba(2, 6, 23, 0.9);
+      border-radius: 0 8px 8px 0;
+      padding: 10px;
+    }
+  }
 </style>
 </head>
-<body class="min-h-screen bg-gradient-to-b from-blue-950 via-blue-900 to-blue-800 text-blue-50 font-sans flex">
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-900 text-blue-50">
 
-
-
- <!-- ====== Sidebar ====== -->
-  <aside class="w-64 bg-blue-950/70 backdrop-blur-md border-r border-blue-400/30 p-6 flex flex-col items-center shadow-xl">
-    <div class="w-32 h-32 overflow-hidden mb-6 rounded-full border-2 border-blue-300">
-      <img src="imagen1.jpg" alt="Logo Universidad" class="object-cover w-full h-full">
+  <!-- ====== INTRO ANIMADA ====== -->
+  <div id="intro" class="intro-hide">
+    <div class="intro-grid"></div>
+    <div class="intro-logo">
+      <img src="luisa caseres.png" alt="Logo" style="width: 100%; height: 100%; object-fit: cover;">
     </div>
-    <nav class="flex flex-col gap-4 text-blue-100 w-full text-center">
-      <a href="#inicio" class="py-2 rounded-lg hover:bg-blue-500/40 transition">Inicio</a>
-      <a href="#informacion" class="py-2 rounded-lg hover:bg-blue-500/40 transition">Información</a>
-      <a href="#introduccion" class="py-2 rounded-lg hover:bg-blue-500/40 transition">Introducción</a>
-      <a href="#computadoras" class="py-2 rounded-lg hover:bg-blue-500/40 transition">Computadoras</a>
-      <a href="#mantenimiento" class="py-2 rounded-lg hover:bg-blue-500/40 transition">Pasos de mantenimiento</a>
-      <a href="#desarrolladores" class="py-2 rounded-lg hover:bg-blue-500/40 transition">Desarrolladores</a>
-    </nav>
+    <div class="intro-text tech">Sistema Iniciando</div>
+    <div class="loading-bar">
+      <div class="loading-progress"></div>
+    </div>
+    <div id="binary-container"></div>
+  </div>
+
+  <!-- ====== SIDEBAR COLAPSABLE ====== -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-toggle" onclick="toggleSidebar()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    
+    <div class="sidebar-collapsed-icon">
+      <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+      </svg>
+    </div>
+    
+    <div class="sidebar-content">
+      <div class="sidebar-logo-container">
+        <img src="imagen1.jpg" alt="Logo Universidad" class="sidebar-logo">
+      </div>
+      
+      <nav class="sidebar-nav">
+        <a href="#inicio" onclick="toggleSidebar()">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+          <span>Inicio</span>
+        </a>
+        <a href="#informacion" onclick="toggleSidebar()">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          <span>Información</span>
+        </a>
+        <a href="#introduccion" onclick="toggleSidebar()">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+          <span>Introducción</span>
+        </a>
+        <a href="#computadoras" onclick="toggleSidebar()">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          <span>Computadoras</span>
+        </a>
+        <a href="#mantenimiento" onclick="toggleSidebar()">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          <span>Mantenimiento</span>
+        </a>
+        <a href="#desarrolladores" onclick="toggleSidebar()">
+          <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          <span>Desarrolladores</span>
+        </a>
+      </nav>
+    </div>
   </aside>
 
-  <!-- ====== Contenido principal ====== -->
-  <div class="flex-1 py-12 px-10">
+  <!-- ====== CONTENIDO PRINCIPAL ====== -->
+  <div class="main-content py-12 px-8 md:px-12">
 
-    <!-- ====== Header con fondo animado ====== -->
-<header class="relative w-full h-52 md:h-64 rounded-xl overflow-hidden mb-10 border border-blue-400/30 shadow-xl">
+    <!-- Header -->
+    <section id="inicio" class="mb-16 relative w-full h-[500px] rounded-3xl overflow-hidden shadow-2xl border border-blue-500/20 group">
+      <img src="COMUNIDAD1.jpg" class="carousel-img absolute inset-0 w-full h-full object-cover active">
+      <img src="COMUNIDAD2.jpg" class="carousel-img absolute inset-0 w-full h-full object-cover">
+      <img src="COMUNIDAD3.jpg" class="carousel-img absolute inset-0 w-full h-full object-cover">
 
-<section id="inicio" class="mb-10 relative w-full h-64 md:h-96 rounded-xl overflow-hidden">
-  <!-- Carrusel de fondo -->
-  <img src="COMUNIDAD1.jpg" class="carousel-img absolute inset-0 w-full h-full object-cover active">
-  <img src="COMUNIDAD2.jpg" class="carousel-img absolute inset-0 w-full h-full object-cover">
-  <img src="COMUNIDAD3.jpg" class="carousel-img absolute inset-0 w-full h-full object-cover">
+      <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent z-10"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-blue-950/80 to-transparent z-10"></div>
 
-  <!-- Capa oscura -->
-  <div class="absolute inset-0 bg-black/40"></div>
+      <div class="absolute top-8 left-8 w-28 h-28 md:w-36 md:h-36 z-20 overflow-hidden rounded-2xl shadow-2xl border-2 border-white/20 backdrop-blur-sm bg-white/5">
+        <img src="luisa caseres.png" alt="Logo" class="w-full h-full object-cover">
+      </div>
 
-<!-- Logo encima cuadrado sin borde -->
-<div class="absolute top-4 left-4 w-24 h-24 md:w-32 md:h-32 z-20 overflow-hidden shadow-lg">
-  <img src="luisa caseres.png" alt="Logo" class="w-full h-full object-cover">
-</div>
+      <div class="absolute inset-0 flex flex-col items-center justify-end pb-16 z-20 text-center px-8">
+        <h1 class="text-5xl md:text-7xl font-bold text-white mb-4 drop-shadow-2xl serif tracking-tight">
+          Luisa Cáceres de <span class="gradient-text">Arizmendi</span>
+        </h1>
+        <p class="text-xl md:text-2xl text-blue-200/90 max-w-2xl font-light tracking-wide">
+          Comunidad para compartir, aprender y crear juntos
+        </p>
+        <div class="mt-8 flex gap-4">
+          <a href="#informacion" class="px-8 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-semibold transition-all shadow-lg hover:shadow-blue-500/50 hover:-translate-y-1">
+            Explorar
+          </a>
+          <a href="#computadoras" class="px-8 py-3 bg-white/10 hover:bg-white/20 text-white border border-white/30 rounded-full font-semibold transition-all backdrop-blur-sm">
+            Ver Galería
+          </a>
+        </div>
+      </div>
+    </section>
 
+    <!-- Bienvenida -->
+    <section class="mb-20 fade-in">
+      <div class="glass-strong rounded-3xl shadow-2xl p-12 border border-blue-400/20 hover-lift">
+        <div class="grid md:grid-cols-2 gap-12 items-center">
+          <div>
+            <h2 class="text-4xl font-bold mb-6 text-white serif">Bienvenido a nuestra comunidad</h2>
+            <p class="text-blue-200/80 text-lg mb-8 leading-relaxed">
+              Conecta con personas que comparten tus intereses, participa en proyectos innovadores 
+              y contribuye al desarrollo tecnológico de nuestra institución.
+            </p>
+            <div class="flex gap-4">
+              <div class="flex items-center gap-2 text-blue-300">
+                <div class="w-10 h-10 rounded-full bg-blue-600/30 flex items-center justify-center">
+                  <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
+                </div>
+                <span>Aprendizaje colaborativo</span>
+              </div>
+            </div>
+          </div>
+          <div class="relative">
+            <div class="absolute inset-0 bg-blue-500/20 blur-3xl rounded-full"></div>
+            <div class="relative rounded-2xl overflow-hidden border border-blue-400/30 shadow-2xl">
+              <div class="aspect-video bg-gradient-to-br from-blue-900 to-slate-900 flex items-center justify-center text-blue-300">
+                <div class="text-center">
+                  <img 
+        src="COMUNIDAD2.jpg" 
+        alt="eli.ai Interface" 
+        class="w-full h-full object-cover shadow-inner"
+      />
+                  <span class="text-lg italic">Luisa Cáceres de Arizmendi</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <!-- Información -->
+    <section id="informacion" class="mb-20">
+      <div class="text-center mb-12">
+        <h3 class="text-4xl font-bold text-white mb-4 serif">Sobre Nosotros</h3>
+        <div class="decorative-line"></div>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-8">
+        <article class="glass p-8 rounded-2xl border border-blue-400/20 hover-lift group">
+          <div class="w-14 h-14 bg-blue-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600/40 transition-colors">
+            <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          </div>
+          <h4 class="text-2xl font-semibold text-white mb-4">Misión</h4>
+          <p class="text-blue-200/80 leading-relaxed">
+            Formar nuevos(as) republicanos(as) humanistas, socialmente conscientes y comprometidos 
+            con el momento histórico coyuntural del país.
+          </p>
+        </article>
+        
+        <article class="glass p-8 rounded-2xl border border-blue-400/20 hover-lift group">
+          <div class="w-14 h-14 bg-blue-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600/40 transition-colors">
+            <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+          </div>
+          <h4 class="text-2xl font-semibold text-white mb-4">Visión</h4>
+          <p class="text-blue-200/80 leading-relaxed">
+            Lograr transformar y potenciar la escuela hacia la educación liberadora con la 
+            participación protagónica de toda la comunidad educativa.
+          </p>
+        </article>
+        
+        <article class="glass p-8 rounded-2xl border border-blue-400/20 hover-lift md:col-span-2 group">
+          <div class="w-14 h-14 bg-blue-600/20 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600/40 transition-colors">
+            <svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+          </div>
+          <h4 class="text-2xl font-semibold text-white mb-4">Reseña Histórica</h4>
+          <p class="text-blue-200/80 leading-relaxed mb-4">
+            La Escuela Básica Nacional "Luisa Cáceres de Arismendi" ubicada en Ciudad Socialista "La Mora" fué fundada el 04 de Octubre del 2016 y la historicidad que dio origen al "Epónimo" que lleva por nombre, fué seleccionado a través de la consulta popular comunitaria realizada el 10 de marzo del 2016, de la cual por decisión unánime se tomo que la institución llevase el nombre de "Luisa Cáceres de Arismendi" por ser la heroína mas representativa del género femenino e insigne de la historia de la gesta de la independencia Venezolana.
 
-  <!-- Texto encima -->
-  <div class="absolute inset-0 flex items-center justify-center z-20">
-    <h1 class="text-3xl md:text-5xl font-extrabold text-white drop-shadow-lg text-center">
-      Comunidad Luisa Cáceres de Arizmendi
-    </h1>
+De este modo, el plantel educativo abrió sus puertas a la escolarización de más de 600 estudiantes que son atendidos en los Niveles de "Educación Inicial y Primaria", con la modalidad diurna conformado en 2 turnos: "Mañana y Tarde". La representativa insignia del plantel fué creada por el Prof. Wilmer Bracho y la Sra. Mirian Colmenárez.
+
+          </p>
+          <div class="flex items-center gap-2 text-blue-400 text-sm font-medium">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/></svg>
+            Aragua, La Victoria, Ciudad Socialista "La Mora"
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- Introducción al mantenimiento -->
+    <section id="introduccion" class="mb-20">
+      <div class="glass-strong rounded-3xl p-12 border border-blue-400/20">
+        <h3 class="text-4xl font-bold text-white mb-8 serif flex items-center gap-4">
+          <span class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center text-2xl">🔧</span>
+          Introducción al Mantenimiento
+        </h3>
+        
+        <p class="text-blue-200/80 text-lg mb-10 leading-relaxed">
+          El mantenimiento informático es un proceso fundamental que busca garantizar el correcto 
+          funcionamiento, rendimiento y durabilidad de los equipos de cómputo.
+        </p>
+
+        <div class="grid md:grid-cols-3 gap-6 mb-12">
+          <div class="bg-gradient-to-br from-blue-600/20 to-blue-800/20 p-6 rounded-2xl border border-blue-400/30 hover-lift">
+            <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center mb-4">
+              <span class="text-2xl">🛡️</span>
+            </div>
+            <h4 class="text-xl font-bold text-white mb-2">Preventivo</h4>
+            <p class="text-blue-200/70 text-sm">Es el conjunto de acciones que se realizan de manera programada y periódica para reducir la probabilidad de fallos. No se espera a que algo se rompa; se interviene basándose en el tiempo de uso o en intervalos predefinidos.
+
+Objetivo: Alargar la vida útil y evitar paradas inesperadas.
+
+Ejemplo: Cambiar el aceite de un motor cada 10,000 km o realizar una limpieza profunda a un equipo cada mes.</p>
+          </div>
+          
+          <div class="bg-gradient-to-br from-blue-600/20 to-blue-800/20 p-6 rounded-2xl border border-blue-400/30 hover-lift">
+            <div class="w-12 h-12 bg-red-500/20 rounded-lg flex items-center justify-center mb-4">
+              <span class="text-2xl">🔧</span>
+            </div>
+            <h4 class="text-xl font-bold text-white mb-2">Correctivo</h4>
+            <p class="text-blue-200/70 text-sm">Es aquel que se ejecuta cuando el fallo ya ha ocurrido. Es la respuesta inmediata para reparar algo que dejó de funcionar o que presenta un comportamiento errático.
+
+Existen dos tipos:
+
+Inmediato (o de emergencia): Se repara en el momento porque la falla detiene el proceso.
+
+Diferido: Se detecta la falla, pero se programa la reparación para un momento más conveniente porque no afecta la seguridad o la producción inmediata..</p>
+          </div>
+          
+          <div class="bg-gradient-to-br from-blue-600/20 to-blue-800/20 p-6 rounded-2xl border border-blue-400/30 hover-lift">
+            <div class="w-12 h-12 bg-yellow-500/20 rounded-lg flex items-center justify-center mb-4">
+              <span class="text-2xl">📊</span>
+            </div>
+            <h4 class="text-xl font-bold text-white mb-2">Predictivo</h4>
+            <p class="text-blue-200/70 text-sm">Es el nivel más avanzado y analítico. Se basa en la monitorización del estado real del equipo mediante herramientas tecnológicas. No se cambia una pieza porque "ya pasó el tiempo" (preventivo), sino porque los datos indican que está a punto de fallar.
+
+Se utilizan variables como:
+
+Vibración: Análisis de oscilaciones fuera de lo común.
+
+Termografía: Detección de puntos de calor excesivo.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Computadoras - Galería Principal -->
+    <section id="computadoras" class="mb-20">
+      <div class="text-center mb-12">
+        <h3 class="text-4xl font-bold text-white mb-4 serif">Galería de Computadoras</h3>
+        <p class="text-blue-300">Antes y después del mantenimiento</p>
+        <div class="decorative-line"></div>
+      </div>
+      
+      <div class="grid md:grid-cols-2 gap-8 mb-12">
+        <div class="group cursor-pointer" onclick="openPanel('antes')">
+          <div class="relative overflow-hidden rounded-3xl border-2 border-red-500/30 shadow-2xl hover-lift">
+            <img src="pc7.jpg" class="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-110">
+            <div class="absolute inset-0 bg-gradient-to-t from-red-950/90 via-transparent to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-8">
+              <span class="px-3 py-1 bg-red-600 text-white text-xs font-bold rounded-full">ANTES</span>
+              <h4 class="text-2xl font-bold text-white mt-2">Estado Inicial</h4>
+            </div>
+          </div>
+        </div>
+        
+        <div class="group cursor-pointer" onclick="openPanel('despues')">
+          <div class="relative overflow-hidden rounded-3xl border-2 border-green-500/30 shadow-2xl hover-lift">
+            <img src="computadoras-despues1.jpg" class="w-full aspect-[4/3] object-cover transition-transform duration-700 group-hover:scale-110">
+            <div class="absolute inset-0 bg-gradient-to-t from-green-950/90 via-transparent to-transparent"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-8">
+              <span class="px-3 py-1 bg-green-600 text-white text-xs font-bold rounded-full">DESPUÉS</span>
+              <h4 class="text-2xl font-bold text-white mt-2">Resultado Final</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+<!-- PROCESOS DE MANTENIMIENTO - VERSIÓN CON DESCRIPCIONES DE TEXTO -->
+<section id="mantenimiento" class="mb-20">
+  <div class="glass-strong rounded-3xl p-12 border border-blue-400/20">
+    <h3 class="text-4xl font-bold text-white mb-4 serif text-center">Procesos de Mantenimiento</h3>
+    <p class="text-blue-300 text-center mb-12">Documentación detallada del procedimiento técnico</p>
+    
+    <!-- Paso 1: Preparación -->
+    <div class="mb-16">
+      <h4 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+        <span class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-lg font-bold">1</span>
+        Preparación y Diagnóstico Inicial
+      </h4>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <div class="bg-gradient-to-br from-blue-900/50 to-blue-800/30 p-6 rounded-2xl border border-blue-500/30 hover:border-blue-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-blue-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">🔍</span>
+          </div>
+          <h5 class="text-blue-300 font-bold text-center mb-2 text-lg">INSPECCIÓN VISUAL</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 1.1</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Revisión externa del equipo. Verificación de daños físicos, cables sueltos y estado general del gabinete. Estado del gabinete o carcasa.
+
+Presencia de polvo o suciedad visible.
+
+Cables de alimentación o periféricos dañados.
+
+Puertos USB, HDMI, VGA o de red en mal estado.
+
+Ruido extraño proveniente de ventiladores.
+
+Objetivo:
+Detectar fallas visibles antes de manipular el equipo.
+          </p>
+          <div class="mt-4 p-3 bg-blue-950/50 rounded-lg border border-blue-500/20">
+            <p class="text-xs text-blue-300 font-mono">CHECK: Gabinete, cables, puertos</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-blue-900/50 to-blue-800/30 p-6 rounded-2xl border border-blue-500/30 hover:border-blue-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-red-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">🔌</span>
+          </div>
+          <h5 class="text-red-300 font-bold text-center mb-2 text-lg">DESCONECTAR</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 1.2</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Apagar equipo y desconectar de la corriente. Retirar todos los cables y periféricos conectados. Procedimiento:
+
+Apagar el sistema operativo correctamente.
+
+Desconectar el cable de alimentación.
+
+Retirar periféricos (mouse, teclado, monitor, USB, etc.).
+
+Presionar el botón de encendido durante 5 segundos para descargar energía residual.
+
+Importante:
+Nunca realizar mantenimiento con el equipo conectado.
+          </p>
+          <div class="mt-4 p-3 bg-red-950/30 rounded-lg border border-red-500/20">
+            <p class="text-xs text-red-300 font-mono">⚠️ ESPERAR 5 MINUTOS</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-blue-900/50 to-blue-800/30 p-6 rounded-2xl border border-blue-500/30 hover:border-blue-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-green-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">🧰</span>
+          </div>
+          <h5 class="text-green-300 font-bold text-center mb-2 text-lg">KIT DE HERRAMIENTAS</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 1.3</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Preparar: destornilladores, aire comprimido, alcohol isopropílico, pinceles y pulsera antiestática. Herramientas recomendadas:
+
+Destornilladores Phillips y planos.
+
+Aire comprimido.
+
+Alcohol isopropílico (90% o más).
+
+Brocha o pincel antiestático.
+
+Paño de microfibra.
+
+Pulsera antiestática.
+
+Pinzas de precisión.
+
+Recomendación:
+Usar herramientas antiestáticas para evitar daños en la placa madre.
+
+          </p>
+          <div class="mt-4 p-3 bg-green-950/30 rounded-lg border border-green-500/20">
+            <p class="text-xs text-green-300 font-mono">LISTA: 8 herramientas</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-blue-900/50 to-blue-800/30 p-6 rounded-2xl border border-blue-500/30 hover:border-blue-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-purple-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">🏢</span>
+          </div>
+          <h5 class="text-purple-300 font-bold text-center mb-2 text-lg">ÁREA DE TRABAJO</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 1.4</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Mesa limpia, bien iluminada y sin estática. Colocar manta antiestática si está disponible. Características del área:
+
+Superficie limpia.
+
+Buena iluminación.
+
+Espacio amplio para colocar componentes.
+
+Sin líquidos cerca.
+
+Uso de tapete o pulsera antiestática.
+
+Objetivo:
+Evitar pérdida de piezas y proteger los componentes electrónicos.
+          </p>
+          <div class="mt-4 p-3 bg-purple-950/30 rounded-lg border border-purple-500/20">
+            <p class="text-xs text-purple-300 font-mono">ZONA: Limpia y seca</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Paso 2: Limpieza Externa -->
+    <div class="mb-16">
+      <h4 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+        <span class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-lg font-bold">2</span>
+        Limpieza Externa
+      </h4>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <div class="bg-gradient-to-br from-orange-900/50 to-orange-800/30 p-6 rounded-2xl border border-orange-500/30 hover:border-orange-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-orange-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">🖥️</span>
+          </div>
+          <h5 class="text-orange-300 font-bold text-center mb-2 text-lg">GABINETE</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 2.1</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Limpiar superficie externa con paño de microfibra. Eliminar polvo de rejillas de ventilación.
+          </p>
+          <div class="mt-4 p-3 bg-orange-950/30 rounded-lg border border-orange-500/20">
+            <p class="text-xs text-orange-300 font-mono">USAR: Paño seco</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-cyan-900/50 to-cyan-800/30 p-6 rounded-2xl border border-cyan-500/30 hover:border-cyan-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-cyan-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">🖥️</span>
+          </div>
+          <h5 class="text-cyan-300 font-bold text-center mb-2 text-lg">MONITOR</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 2.2</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Pantalla: paño de microfibra seco. Marco y base: paño ligeramente humedecido con alcohol.
+          </p>
+          <div class="mt-4 p-3 bg-cyan-950/30 rounded-lg border border-cyan-500/20">
+            <p class="text-xs text-cyan-300 font-mono">NO: Productos abrasivos</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-pink-900/50 to-pink-800/30 p-6 rounded-2xl border border-pink-500/30 hover:border-pink-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-pink-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">⌨️</span>
+          </div>
+          <h5 class="text-pink-300 font-bold text-center mb-2 text-lg">PERIFÉRICOS</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 2.3</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Teclado: voltear y sacudir suavemente. Mouse: limpiar sensor y patines. Usar aire comprimido.
+          </p>
+          <div class="mt-4 p-3 bg-pink-950/30 rounded-lg border border-pink-500/20">
+            <p class="text-xs text-pink-300 font-mono">CUIDADO: Teclas sueltas</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-yellow-900/50 to-yellow-800/30 p-6 rounded-2xl border border-yellow-500/30 hover:border-yellow-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-yellow-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">🔌</span>
+          </div>
+          <h5 class="text-yellow-300 font-bold text-center mb-2 text-lg">CABLEADO</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 2.4</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Enrollar cables ordenadamente. Limpiar conectores con alcohol isopropílico. Revisar daños.
+          </p>
+          <div class="mt-4 p-3 bg-yellow-950/30 rounded-lg border border-yellow-500/20">
+            <p class="text-xs text-yellow-300 font-mono">ORGANIZAR: Con velcro</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Paso 3: Limpieza Interna -->
+    <div class="mb-16">
+      <h4 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+        <span class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-lg font-bold">3</span>
+        Limpieza Interna
+      </h4>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <div class="bg-gradient-to-br from-red-900/50 to-red-800/30 p-6 rounded-2xl border border-red-500/30 hover:border-red-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-red-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">🔓</span>
+          </div>
+          <h5 class="text-red-300 font-bold text-center mb-2 text-lg">APERTURA</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 3.1</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Retirar tornillos laterales. Deslizar panel con cuidado. Usar pulsera antiestática. Procedimiento:
+
+Colocar el equipo sobre una superficie plana.
+
+Retirar los tornillos laterales del gabinete con un destornillador adecuado.
+
+Deslizar o retirar el panel lateral con cuidado.
+
+Colocar los tornillos en un recipiente para no perderlos.
+
+Recomendaciones:
+
+Utilizar pulsera antiestática para evitar descargas eléctricas.
+
+No forzar el panel si está ajustado.
+
+Evitar tocar directamente la placa madre.
+
+Objetivo:
+
+Permitir el acceso seguro a los componentes internos para su limpieza y revisión.
+          </p>
+          <div class="mt-4 p-3 bg-red-950/30 rounded-lg border border-red-500/20">
+            <p class="text-xs text-red-300 font-mono">⚠️ ANTES: Tocar metal</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-blue-900/50 to-blue-800/30 p-6 rounded-2xl border border-blue-500/30 hover:border-blue-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-blue-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">💨</span>
+          </div>
+          <h5 class="text-blue-300 font-bold text-center mb-2 text-lg">AIRE COMPRIMIDO</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 3.2</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Sostener lata vertical. Soplado cortos. Mantener ventiladores fijos mientras se sopla.Cómo usarlo correctamente:
+
+Mantener la lata en posición vertical.
+
+Realizar soplidos cortos.
+
+Mantener una distancia aproximada de 10 a 15 cm del componente.
+
+Evitar que los ventiladores giren mientras se sopla aire.
+
+Zonas donde se aplica:
+
+Placa madre
+
+Ventiladores
+
+Fuente de poder
+
+Ranuras de memoria RAM
+
+Tarjeta gráfica
+
+Advertencia:
+
+No inclinar la lata porque puede expulsar líquido y dañar los circuitos.
+          </p>
+          <div class="mt-4 p-3 bg-blue-950/50 rounded-lg border border-blue-500/20">
+            <p class="text-xs text-blue-300 font-mono">NO: Inclinar lata</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-green-900/50 to-green-800/30 p-6 rounded-2xl border border-green-500/30 hover:border-green-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-green-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">🧹</span>
+          </div>
+          <h5 class="text-green-300 font-bold text-center mb-2 text-lg">COMPONENTES</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 3.3</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Cepillar suavemente placas. Usar hisopos con alcohol para contactos. No tocar circuitos. Herramientas recomendadas:
+
+Brocha antiestática
+
+Hisopos
+
+Alcohol isopropílico
+
+Paño de microfibra
+
+Procedimiento:
+
+Cepillar suavemente la placa madre.
+
+Limpiar conectores con hisopos ligeramente humedecidos.
+
+Retirar polvo de tarjetas de expansión.
+
+Verificar que no queden residuos.
+
+Importante:
+
+Nunca aplicar alcohol directamente sobre la placa; debe aplicarse primero en el hisopo.
+          </p>
+          <div class="mt-4 p-3 bg-green-950/30 rounded-lg border border-green-500/20">
+            <p class="text-xs text-green-300 font-mono">SUAVE: Cerdas antiestáticas</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-purple-900/50 to-purple-800/30 p-6 rounded-2xl border border-purple-500/30 hover:border-purple-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-purple-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">🌀</span>
+          </div>
+          <h5 class="text-purple-300 font-bold text-center mb-2 text-lg">VENTILADORES</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 3.4</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Limpiar aspas con pincel. Verificar giro libre. Lubricar si es necesario (bearing). Pasos:
+
+Sujetar el ventilador para que no gire.
+
+Limpiar las aspas con una brocha suave.
+
+Retirar el polvo acumulado en los bordes.
+
+Verificar que el ventilador gire libremente.
+
+Mantenimiento adicional:
+
+Si el ventilador produce ruido, puede aplicarse lubricante en el eje (bearing).
+
+Beneficio:
+
+Evita el sobrecalentamiento del procesador y otros componentes.
+          </p>
+          <div class="mt-4 p-3 bg-purple-950/30 rounded-lg border border-purple-500/20">
+            <p class="text-xs text-purple-300 font-mono">FIJAR: No dejar girar</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-orange-900/50 to-orange-800/30 p-6 rounded-2xl border border-orange-500/30 hover:border-orange-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-orange-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">🌡️</span>
+          </div>
+          <h5 class="text-orange-300 font-bold text-center mb-2 text-lg">CPU & DISIPADOR</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 3.5</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Retirar disipador. Limpiar pasta térmica vieja con alcohol. Preparar para nueva aplicación. Procedimiento:
+
+Retirar el disipador aflojando los tornillos o seguros.
+
+Limpiar la pasta térmica antigua con alcohol isopropílico.
+
+Limpiar la superficie del procesador y del disipador.
+
+Aplicar nueva pasta térmica en pequeña cantidad.
+
+Volver a colocar el disipador.
+
+Recomendación:
+
+Aplicar solo una pequeña gota de pasta térmica en el centro del CPU.
+          </p>
+          <div class="mt-4 p-3 bg-orange-950/30 rounded-lg border border-orange-500/20">
+            <p class="text-xs text-orange-300 font-mono">LIMPIO: Sin residuos</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-teal-900/50 to-teal-800/30 p-6 rounded-2xl border border-teal-500/30 hover:border-teal-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-teal-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">💾</span>
+          </div>
+          <h5 class="text-teal-300 font-bold text-center mb-2 text-lg">RANURAS</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 3.6</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Limpiar slots RAM con aire. Revisar PCIe. Verificar conectores SATA limpios. Procedimiento:
+
+Retirar cuidadosamente la memoria RAM.
+
+Limpiar las ranuras con aire comprimido.
+
+Revisar que no haya polvo o residuos.
+
+Volver a insertar los módulos correctamente.
+
+Componentes que usan ranuras:
+
+Memoria RAM
+
+Tarjeta gráfica
+
+Tarjeta de red
+
+Tarjeta de sonido
+
+Importancia:
+
+Una ranura sucia puede provocar fallos de reconocimiento del hardware.
+          </p>
+          <div class="mt-4 p-3 bg-teal-950/30 rounded-lg border border-teal-500/20">
+            <p class="text-xs text-teal-300 font-mono">SOPLO: Corto y seco</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Paso 4: Mantenimiento Hardware -->
+    <div class="mb-16">
+      <h4 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+        <span class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-lg font-bold">4</span>
+        Mantenimiento de Hardware
+      </h4>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <div class="bg-gradient-to-br from-red-900/50 to-orange-800/30 p-6 rounded-2xl border border-red-500/30 hover:border-red-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-red-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">🌡️</span>
+          </div>
+          <h5 class="text-red-300 font-bold text-center mb-2 text-lg">PASTA TÉRMICA</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 4.1</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Aplicar gota pequeña en centro CPU. Montar disipador con presión uniforme. Conectar fan. Procedimiento:
+
+Limpiar la pasta térmica antigua con alcohol isopropílico.
+
+Secar la superficie del procesador y el disipador.
+
+Aplicar una pequeña cantidad de pasta térmica en el centro del CPU.
+
+Colocar nuevamente el disipador con presión uniforme.
+
+Conectar el ventilador del procesador.
+
+Recomendación:
+
+La cantidad ideal es similar al tamaño de un grano de arroz o una arveja.
+
+Beneficios:
+
+Reduce la temperatura del procesador.
+
+Mejora el rendimiento del sistema.
+
+Aumenta la vida útil del CPU.
+          </p>
+          <div class="mt-4 p-3 bg-red-950/30 rounded-lg border border-red-500/20">
+            <p class="text-xs text-red-300 font-mono">CANTIDAD: Tamaño arveja</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-blue-900/50 to-indigo-800/30 p-6 rounded-2xl border border-blue-500/30 hover:border-blue-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-blue-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">💾</span>
+          </div>
+          <h5 class="text-blue-300 font-bold text-center mb-2 text-lg">MEMORIA RAM</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 4.2</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Retirar módulos. Limpiar contactos con borrador blanco. Reinsertar hasta clic. Verificar BIOS. Importancia del mantenimiento:
+
+Si los contactos de la RAM están sucios, pueden producirse errores como:
+
+Pantalla azul
+
+Reinicios inesperados
+
+El sistema no reconoce la memoria
+
+Procedimiento:
+
+Retirar los módulos de RAM presionando las pestañas laterales.
+
+Limpiar los contactos dorados con una goma de borrar blanca.
+
+Eliminar residuos con aire comprimido.
+
+Insertar nuevamente la memoria RAM hasta escuchar un clic.
+
+Recomendación:
+
+Instalar la memoria en los slots correctos según la configuración de la placa madre para aprovechar el dual channel.
+          </p>
+          <div class="mt-4 p-3 bg-blue-950/50 rounded-lg border border-blue-500/20">
+            <p class="text-xs text-blue-300 font-mono">CLICK: Ambos seguros</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-yellow-900/50 to-yellow-800/30 p-6 rounded-2xl border border-yellow-500/30 hover:border-yellow-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-yellow-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">⚡</span>
+          </div>
+          <h5 class="text-yellow-300 font-bold text-center mb-2 text-lg">FUENTE DE PODER</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 4.3</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Limpiar rejilla y ventilador interno. Verificar cables de alimentación. No abrir fuente (condensadores). Mantenimiento básico:
+
+Limpiar la rejilla del ventilador.
+
+Eliminar polvo acumulado.
+
+Revisar cables de alimentación.
+
+Verificar que el ventilador funcione correctamente.
+
+Advertencia ⚠️:
+
+Nunca abrir la fuente de poder, ya que contiene condensadores que almacenan alto voltaje, incluso cuando está desconectada.
+
+Problemas comunes:
+
+Apagados repentinos
+
+Reinicios del sistema
+
+Ruido excesivo del ventilador
+
+Olor a quemado
+          </p>
+          <div class="mt-4 p-3 bg-yellow-950/30 rounded-lg border border-yellow-500/20">
+            <p class="text-xs text-yellow-300 font-mono">⚠️ PELIGRO: Alto voltaje</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-green-900/50 to-green-800/30 p-6 rounded-2xl border border-green-500/30 hover:border-green-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-green-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">💿</span>
+          </div>
+          <h5 class="text-green-300 font-bold text-center mb-2 text-lg">ALMACENAMIENTO</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 4.4</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Verificar conexiones SATA. Revisar estado SMART. Desfragmentar si es HDD. Optimizar SSD. Mantenimiento recomendado:
+
+Revisar cables SATA y de alimentación.
+
+Limpiar el polvo alrededor del dispositivo.
+
+Verificar estado del disco con programas de diagnóstico.
+
+Herramientas útiles:
+
+CrystalDiskInfo
+
+CHKDSK
+
+SMART Monitoring
+
+Optimización:
+
+Desfragmentar discos HDD.
+
+No desfragmentar SSD.
+
+Mantener al menos 20% de espacio libre.
+          </p>
+          <div class="mt-4 p-3 bg-green-950/30 rounded-lg border border-green-500/20">
+            <p class="text-xs text-green-300 font-mono">CHECK: CrystalDiskInfo</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Paso 5: Software -->
+    <div class="mb-16">
+      <h4 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+        <span class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-lg font-bold">5</span>
+        Software y Pruebas Finales
+      </h4>
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        
+        <div class="bg-gradient-to-br from-blue-900/50 to-blue-800/30 p-6 rounded-2xl border border-blue-500/30 hover:border-blue-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-blue-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">⬆️</span>
+          </div>
+          <h5 class="text-blue-300 font-bold text-center mb-2 text-lg">ACTUALIZAR S.O.</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 5.1</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Windows Update o equivalente. Instalar parches de seguridad. Reiniciar y verificar. Ciclo de Reinicio: Explica que algunas actualizaciones requieren hasta 2 o 3 reinicios para aplicarse correctamente en el registro del sistema.
+
+Opciones Avanzadas: Menciona la importancia de revisar "Actualizaciones opcionales", donde suelen estar parches de compatibilidad específicos.
+
+Verificación de Compilación: Al finalizar, usar el comando winver para asegurar que el cliente tiene la versión más estable y reciente.
+          </p>
+          <div class="mt-4 p-3 bg-blue-950/50 rounded-lg border border-blue-500/20">
+            <p class="text-xs text-blue-300 font-mono">TIEMPO: 30-60 min</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-purple-900/50 to-purple-800/30 p-6 rounded-2xl border border-purple-500/30 hover:border-purple-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-purple-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">🎮</span>
+          </div>
+          <h5 class="text-purple-300 font-bold text-center mb-2 text-lg">DRIVERS</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 5.2</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Actualizar GPU, chipset, audio y red. Usar sitios oficiales. Crear punto de restauración. Orden de Instalación: Se recomienda instalar primero el driver del Chipset, seguido de LAN/Wi-Fi y finalmente Video y Audio.
+
+Drivers de Terceros vs. Oficiales: Advierte sobre evitar programas de "auto-instalación" de drivers sospechosos; siempre priorizar la web del fabricante (ASUS, MSI, Dell, HP, NVIDIA, AMD).
+
+Punto de Restauración: Es el "seguro de vida" del técnico. Si un driver causa un pantallazo azul (BSOD), puedes volver atrás en segundos.
+          </p>
+          <div class="mt-4 p-3 bg-purple-950/30 rounded-lg border border-purple-500/20">
+            <p class="text-xs text-purple-300 font-mono">FUENTE: OEM oficial</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-red-900/50 to-red-800/30 p-6 rounded-2xl border border-red-500/30 hover:border-red-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-red-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">🛡️</span>
+          </div>
+          <h5 class="text-red-300 font-bold text-center mb-2 text-lg">ANTIVIRUS</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 5.3</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Actualizar definiciones. Escaneo completo del sistema. Configurar protección en tiempo real. Exclusiones: Configurar exclusiones para software de trabajo pesado si es necesario para evitar falsos positivos.
+
+Seguridad por Capas: Mencionar que además del antivirus, es clave tener activo el Firewall y el Filtro de Contenido en el navegador.
+
+Análisis Offline: Para equipos muy infectados, se recomienda un escaneo antes de que el sistema operativo cargue (Boot-time scan).
+          </p>
+          <div class="mt-4 p-3 bg-red-950/30 rounded-lg border border-red-500/20">
+            <p class="text-xs text-red-300 font-mono">SCAN: Completo mensual</p>
+          </div>
+        </div>
+
+        <div class="bg-gradient-to-br from-green-900/50 to-green-800/30 p-6 rounded-2xl border border-green-500/30 hover:border-green-400 transition-all hover:transform hover:scale-105">
+          <div class="w-16 h-16 bg-green-600/20 rounded-xl flex items-center justify-center mb-4 mx-auto">
+            <span class="text-4xl">✅</span>
+          </div>
+          <h5 class="text-green-300 font-bold text-center mb-2 text-lg">PRUEBAS FINALES</h5>
+          <div class="text-center text-white font-bold text-2xl mb-2">PASO 5.4</div>
+          <p class="text-blue-200/70 text-sm text-center leading-relaxed">
+            Verificar temperaturas. Probar todos los puertos. Chequear rendimiento. Documentar cambios. Pruebas de Estrés: Utilizar herramientas como AIDA64 o Prime95 para la CPU, y FurMark para la GPU.
+
+Monitoreo Térmico: Como bien pusiste (OK: Temps < 70°C), explica que si pasa de 85-90°C bajo carga, el equipo hará thermal throttling (bajará su potencia para no quemarse).
+
+Checklist de Periféricos: Probar cada puerto USB, el jack de audio, el teclado (todas las teclas) y el estado de salud del disco duro (SSD/HDD) con CrystalDiskInfo.
+          </p>
+          <div class="mt-4 p-3 bg-green-950/30 rounded-lg border border-green-500/20">
+            <p class="text-xs text-green-300 font-mono">OK: Temps < 70°C</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Resumen Visual -->
+    <div class="mt-12 p-8 bg-gradient-to-r from-blue-900/30 to-purple-900/30 rounded-3xl border border-blue-400/30">
+      <h4 class="text-2xl font-bold text-white mb-6 text-center">Resumen del Proceso</h4>
+      <div class="flex flex-wrap justify-center gap-4">
+        <div class="flex items-center gap-2 bg-blue-600/20 px-4 py-2 rounded-full border border-blue-500/30">
+          <span class="w-6 h-6 bg-blue-600 rounded-full flex items-center justify-center text-xs font-bold">1</span>
+          <span class="text-blue-200 text-sm">Preparación</span>
+        </div>
+        <span class="text-blue-400 self-center">→</span>
+        <div class="flex items-center gap-2 bg-orange-600/20 px-4 py-2 rounded-full border border-orange-500/30">
+          <span class="w-6 h-6 bg-orange-600 rounded-full flex items-center justify-center text-xs font-bold">2</span>
+          <span class="text-orange-200 text-sm">Limpieza Externa</span>
+        </div>
+        <span class="text-blue-400 self-center">→</span>
+        <div class="flex items-center gap-2 bg-purple-600/20 px-4 py-2 rounded-full border border-purple-500/30">
+          <span class="w-6 h-6 bg-purple-600 rounded-full flex items-center justify-center text-xs font-bold">3</span>
+          <span class="text-purple-200 text-sm">Limpieza Interna</span>
+        </div>
+        <span class="text-blue-400 self-center">→</span>
+        <div class="flex items-center gap-2 bg-red-600/20 px-4 py-2 rounded-full border border-red-500/30">
+          <span class="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center text-xs font-bold">4</span>
+          <span class="text-red-200 text-sm">Hardware</span>
+        </div>
+        <span class="text-blue-400 self-center">→</span>
+        <div class="flex items-center gap-2 bg-green-600/20 px-4 py-2 rounded-full border border-green-500/30">
+          <span class="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center text-xs font-bold">5</span>
+          <span class="text-green-200 text-sm">Software</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </section>
 
-<style>
-.carousel-img {
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
-  z-index: 0;
-}
+    <!-- Herramientas -->
+    <section class="mb-20">
+      <div class="glass rounded-3xl p-12 border border-blue-400/20">
+        <h3 class="text-3xl font-bold text-white mb-8 flex items-center gap-3">
+          <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+          Herramientas Utilizadas
+        </h3>
+        
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="glass p-4 rounded-xl text-center hover:bg-blue-800/30 transition">
+            <div class="text-3xl mb-2">💨</div>
+            <h5 class="text-white font-semibold text-sm">Aire Comprimido</h5>
+          </div>
+          <div class="glass p-4 rounded-xl text-center hover:bg-blue-800/30 transition">
+            <div class="text-3xl mb-2">⚙️</div>
+            <h5 class="text-white font-semibold text-sm">Destornilladores</h5>
+          </div>
+          <div class="glass p-4 rounded-xl text-center hover:bg-blue-800/30 transition">
+            <div class="text-3xl mb-2">🧴</div>
+            <h5 class="text-white font-semibold text-sm">Alcohol Isopropílico</h5>
+          </div>
+          <div class="glass p-4 rounded-xl text-center hover:bg-blue-800/30 transition">
+            <div class="text-3xl mb-2">🔌</div>
+            <h5 class="text-white font-semibold text-sm">Multímetro</h5>
+          </div>
+          <div class="glass p-4 rounded-xl text-center hover:bg-blue-800/30 transition">
+            <div class="text-3xl mb-2">🖌️</div>
+            <h5 class="text-white font-semibold text-sm">Pinceles</h5>
+          </div>
+          <div class="glass p-4 rounded-xl text-center hover:bg-blue-800/30 transition">
+            <div class="text-3xl mb-2">💻</div>
+            <h5 class="text-white font-semibold text-sm">Software Diagnóstico</h5>
+          </div>
+          <div class="glass p-4 rounded-xl text-center hover:bg-blue-800/30 transition">
+            <div class="text-3xl mb-2">⚡</div>
+            <h5 class="text-white font-semibold text-sm">Pulsera Antiestática</h5>
+          </div>
+          <div class="glass p-4 rounded-xl text-center hover:bg-blue-800/30 transition">
+            <div class="text-3xl mb-2">🌡️</div>
+            <h5 class="text-white font-semibold text-sm">Pasta Térmica</h5>
+          </div>
+        </div>
+      </div>
+    </section>
 
-.carousel-img.active {
-  opacity: 1;
-  z-index: 1;
-}
-</style>
+    <!-- Videos -->
+    <section class="mb-20">
+      <div class="grid md:grid-cols-2 gap-8">
+        <div class="glass rounded-3xl p-8 border border-blue-400/20 hover-lift">
+          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+            <span class="w-10 h-10 bg-red-600/20 rounded-lg flex items-center justify-center">🎥</span>
+            Proceso Completo
+          </h3>
+          <div class="rounded-2xl overflow-hidden border border-blue-400/30 shadow-xl bg-black/40 aspect-video">
+            <video controls class="w-full h-full">
+              <source src="videos/mantenimiento.mp4" type="video/mp4">
+              <div class="text-blue-300 text-center p-8">
+                <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/></svg>
+                <p>Tu navegador no soporta videos</p>
+              </div>
+            </video>
+          </div>
+        </div>
+
+        <div class="glass rounded-3xl p-8 border border-blue-400/20 hover-lift">
+          <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-3">
+            <span class="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center">🎬</span>
+            Resultados
+          </h3>
+          <div class="rounded-2xl overflow-hidden border border-blue-400/30 shadow-xl bg-black/40 aspect-video">
+            <video controls class="w-full h-full">
+              <source src="videos/otro_video.mp4" type="video/mp4">
+              <div class="text-blue-300 text-center p-8">
+                <svg class="w-16 h-16 mx-auto mb-4 opacity-50" fill="currentColor" viewBox="0 0 20 20"><path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"/></svg>
+                <p>Tu navegador no soporta videos</p>
+              </div>
+            </video>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====== Glosario Informático ====== -->
+<section id="glosario" class="mb-10">
+  <div class="bg-blue-100/10 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-blue-300/30">
+    <h3 class="text-xl font-semibold mb-6 text-blue-100 text-center">Glosario Informático</h3>
+    
+    <!-- Botón para abrir/cerrar -->
+    <button onclick="toggleGlosario()" id="btn-glosario-main" class="w-full py-4 bg-blue-600/20 hover:bg-blue-600/40 border border-blue-400/30 rounded-xl text-blue-200 font-semibold transition-all duration-300 flex items-center justify-center gap-2">
+      <span>📚</span>
+      <span id="texto-btn-glosario">Ver términos de la A a la Z</span>
+      <span id="flecha-glosario">▼</span>
+    </button>
+
+    <!-- Contenido colapsable -->
+    <div id="contenido-glosario" class="hidden mt-6">
+      <!-- Grid de letras -->
+      <div class="grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2 mb-6" id="glosario-botones"></div>
+      
+      <!-- Área de definiciones -->
+      <div id="area-definiciones" class="hidden">
+        <div class="bg-blue-900/40 rounded-xl p-6 border border-blue-400/30">
+          <div class="flex items-center justify-between mb-4">
+            <h4 id="titulo-letra" class="text-2xl font-bold text-white tech"></h4>
+            <button onclick="cerrarLetra()" class="text-blue-300 hover:text-white text-sm">✕ Cerrar</button>
+          </div>
+          <div id="lista-palabras" class="grid md:grid-cols-5 gap-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-  const imgs = document.querySelectorAll('#inicio .carousel-img');
-  let i = 0;
-  setInterval(() => {
-    imgs[i].classList.remove('active');
-    i = (i + 1) % imgs.length;
-    imgs[i].classList.add('active');
-  }, 5000);
-});
+// ====== GLOSARIO ======
+const glosarioData = {
+  A: ["Almacenamiento","Archivo","Algoritmo","API","Antivirus"],
+  B: ["BIOS","Backup","Bit","Bluetooth","Boot"],
+  C: ["CPU","Cache","Computadora","Código Fuente","Compilador"],
+  D: ["Driver","Datos","DNS","Depuración","Descarga"],
+  E: ["Ethernet","Editor","Email","Encriptación","Error"],
+  F: ["Firewall","Firmware","Formato","Función","Fuente de Poder"],
+  G: ["GPU","Gestor de Archivos","Gigabyte","Grupo de Trabajo","GUI"],
+  H: ["Hardware","HTML","HTTP","Host","HDD"],
+  I: ["IP","Interfaz","Input","Instalación","Internet"],
+  J: ["Java","JSON","Joystick","JDK","JPEG"],
+  K: ["Kernel","Keylogger","Kbps","Kickstart","Keyboard"],
+  L: ["LAN","Linux","Lenguaje de Programación","Login","Link"],
+  M: ["Malware","Modem","Motherboard","Megabyte","Monitor"],
+  N: ["Nodo","Nombre de Dominio","Networking","Navegador","Null"],
+  O: ["OS","Open Source","Overclocking","Online","Output"],
+  P: ["PHP","Puerto","Ping","Python","Patch"],
+  Q: ["Query","Queue","QoS","Quark","QuickSort"],
+  R: ["RAM","Router","Root","Registro","Runtime"],
+  S: ["Software","Servidor","Script","SSID","Stack"],
+  T: ["TCP/IP","Trojan","Terminal","Teclado","Token"],
+  U: ["USB","URL","Usuario","UDP","Ubuntu"],
+  V: ["VPN","Virus","Variable","Virtualización","Vector"],
+  W: ["Wi-Fi","Windows","Web","Widget","Worm"],
+  X: ["XML","XSS","Xen","Xbox","Xcode"],
+  Y: ["Y2K","Yarn","Yottabyte","YAML","YouTube"],
+  Z: ["Zip","Zebra","Zero-day","Zombie","Zoom"]
+};
+
+let letraActiva = null;
+
+function toggleGlosario() {
+  const contenido = document.getElementById('contenido-glosario');
+  const flecha = document.getElementById('flecha-glosario');
+  const texto = document.getElementById('texto-btn-glosario');
+  
+  if (contenido.classList.contains('hidden')) {
+    contenido.classList.remove('hidden');
+    flecha.textContent = '▲';
+    texto.textContent = 'Ocultar glosario';
+    generarBotonesLetras();
+  } else {
+    contenido.classList.add('hidden');
+    flecha.textContent = '▼';
+    texto.textContent = 'Ver términos de la A a la Z';
+    cerrarLetra();
+  }
+}
+
+function generarBotonesLetras() {
+  const container = document.getElementById('glosario-botones');
+  if (container.children.length > 0) return;
+  
+  Object.keys(glosarioData).forEach(letra => {
+    const btn = document.createElement('button');
+    btn.className = 'aspect-square rounded-lg bg-blue-600/20 border border-blue-400/30 text-blue-200 font-bold hover:bg-blue-600 hover:text-white hover:border-blue-400 transition-all duration-200 tech';
+    btn.textContent = letra;
+    btn.onclick = () => mostrarLetra(letra, btn);
+    container.appendChild(btn);
+  });
+}
+
+function mostrarLetra(letra, btnElement) {
+  if (letraActiva && letraActiva !== btnElement) {
+    letraActiva.className = 'aspect-square rounded-lg bg-blue-600/20 border border-blue-400/30 text-blue-200 font-bold hover:bg-blue-600 hover:text-white hover:border-blue-400 transition-all duration-200 tech';
+  }
+  
+  btnElement.className = 'aspect-square rounded-lg bg-blue-600 border border-blue-400 text-white font-bold transition-all duration-200 tech';
+  letraActiva = btnElement;
+
+  const area = document.getElementById('area-definiciones');
+  area.classList.remove('hidden');
+  
+  document.getElementById('titulo-letra').textContent = 'Letra ' + letra;
+  
+  const lista = document.getElementById('lista-palabras');
+  lista.innerHTML = '';
+  
+  glosarioData[letra].forEach(palabra => {
+    const div = document.createElement('div');
+    div.className = 'bg-blue-800/30 rounded-lg p-3 border border-blue-400/20 text-center text-blue-100 text-sm font-medium hover:bg-blue-700/30 transition';
+    div.textContent = palabra;
+    lista.appendChild(div);
+  });
+  
+  area.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function cerrarLetra() {
+  document.getElementById('area-definiciones').classList.add('hidden');
+  if (letraActiva) {
+    letraActiva.className = 'aspect-square rounded-lg bg-blue-600/20 border border-blue-400/30 text-blue-200 font-bold hover:bg-blue-600 hover:text-white hover:border-blue-400 transition-all duration-200 tech';
+    letraActiva = null;
+  }
+}
 </script>
 
-
-  <!-- Capa oscura para que el texto resalte -->
-  <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
-
-  <!-- Contenido del header -->
-  <div class="relative z-10 h-full flex items-center gap-6 px-8">
-    <img src="luisa caseres.png" alt="Logo Comunidad" class="w-32 h-32 md:w-40 md:h-40 shadow-lg rounded-xl border border-blue-200">
-    <div>
-      <h1 class="text-4xl font-extrabold tracking-tight text-blue-50 drop-shadow-md">
-        Luisa Cáceres de Arizmendi
-      </h1>
-      <p class="mt-2 text-blue-200/90">
-        Comunidad para compartir, aprender y crear juntos.
-      </p>
-    </div>
-  </div>
-
-</header>
-
-   <!-- ====== Inicio ====== -->
-<section id="inicio" class="bg-blue-100/10 backdrop-blur-lg rounded-2xl shadow-xl p-10 mb-10 border border-blue-300/40 hover:scale-[1.02] transition">
-  <div class="grid md:grid-cols-2 gap-8 items-center">
-    <div>
-      <h2 class="text-3xl font-semibold mb-3 text-blue-100">Bienvenido a Luisa Cáceres de Arizmendi</h2>
-      <p class="text-blue-200 mb-5">Conecta con personas que comparten tus intereses, participa en proyectos y contribuye a un futuro más innovador.</p>
-      <a href="#informacion" class="inline-block px-6 py-3 rounded-xl bg-gradient-to-r from-blue-300 to-blue-400 hover:from-blue-400 hover:to-blue-500 text-blue-950 font-semibold shadow-lg transition">Más información</a>
-    </div>
-    <div class="rounded-xl overflow-hidden border border-blue-300/30">
-      <img src="imagenespc_inicio.jpg" alt="Imagen de bienvenida" class="w-full h-full object-cover">
-    </div>
-  </div>
-</section>
-
-
-<!-- ====== Información ====== -->
-    <section id="informacion" class="mb-10">
-      <h3 class="text-2xl font-semibold mb-4 text-blue-100">Información</h3>
-      <div class="space-y-6">
-        <article class="p-5 bg-gradient-to-r from-blue-100/20 to-blue-200/10 border border-blue-300 rounded-xl shadow-lg">
-          <h4 class="font-medium text-blue-100">Misión</h4>
-          <p class="mt-2 text-blue-200">Formar nuevos(as) republicanos(as) humanistas, socialmente conscientes y comprometidos con el momento histórico coyuntural del país, integrados(as) de forma productiva a la vida útil en su comunidad, explotando la creatividad y la innovación para el fortalecimiento de los valores y la relación escuela, familia y comunidad.</p>
-        </article>
-        <article class="p-5 bg-gradient-to-r from-blue-100/20 to-blue-200/10 border border-blue-300 rounded-xl shadow-lg">
-          <h4 class="font-medium text-blue-100">Visión</h4>
-          <p class="mt-2 text-blue-200">Lograr transformar y potenciar la escuela hacia la educación liberadora con la participación protagónica y consciente del sentido de corresponsabilidad entre toda la comunidad educativa para el desarrollo social como un todo.</p>
-        </article>
-        <article class="p-5 bg-gradient-to-r from-blue-100/20 to-blue-200/10 border border-blue-300 rounded-xl shadow-lg">
-          <h4 class="font-medium text-blue-100">Reseña Histórica</h4>
-          <p class="mt-2 text-blue-200">La Escuela Básica Nacional "Luisa Cáceres de Arismendi" ubicada en Ciudad Socialista "La Mora" fue fundada el 04 de Octubre del 2016 y la historicidad que dio origen al "Epónimo" que lleva por nombre, fue seleccionado a través de la consulta popular comunitaria realizada el 10 de marzo del 2016, de la cual por decisión se tomó que la institución llevase el nombre de "Luisa Cáceres de Arismendi" por ser la heroína más representativa del género femenino e insigne de la historia de la gesta de la independencia Venezolana.</p>
-        </article>
-        <article class="p-5 bg-gradient-to-r from-blue-100/20 to-blue-200/10 border border-blue-300 rounded-xl shadow-lg">
-          <h4 class="font-medium text-blue-100">Ubicación</h4>
-          <p class="mt-2 text-blue-200">Aragua, la Victoria, Ciudad Socialista “La Mora”.</p>
-        </article>
+    <!-- Desarrolladores -->
+    <section id="desarrolladores" class="mb-20">
+      <div class="text-center mb-12">
+        <h3 class="text-4xl font-bold text-white mb-4 serif">Equipo de Desarrollo</h3>
+        <p class="text-blue-300">Estudiantes de PNF en Informática</p>
+        <div class="decorative-line"></div>
       </div>
-    </section>
-
-    <!-- ====== Introducción al mantenimiento ====== -->
-    <section id="introduccion" class="mb-10 bg-blue-100/10 backdrop-blur-md border border-blue-300/40 rounded-2xl shadow-xl p-8">
-      <h3 class="text-2xl font-semibold mb-6 text-blue-100">Introducción al Mantenimiento</h3>
-      <p class="text-blue-200 mb-4">
-        El mantenimiento informático es un proceso fundamental que busca garantizar el correcto funcionamiento, rendimiento y durabilidad de los equipos de cómputo.
-        Permite prevenir fallas, mejorar el rendimiento de los sistemas y optimizar los recursos disponibles en la institución educativa.
-      </p>
-      <h4 class="text-xl font-medium text-blue-100 mt-6 mb-2">Tipos de mantenimiento</h4>
-      <ul class="list-disc ml-6 text-blue-200 space-y-2">
-        <li><strong>Preventivo:</strong> Se realiza periódicamente para evitar fallos futuros. Incluye limpieza física, revisión de cables, y actualización de software.</li>
-        <li><strong>Correctivo:</strong> Se lleva a cabo cuando un equipo presenta una falla. Consiste en reparar o sustituir los componentes dañados.</li>
-        <li><strong>Predictivo:</strong> Se basa en monitorear el estado de los equipos para anticipar posibles averías mediante herramientas de diagnóstico.</li>
-      </ul>
-      <h4 class="text-xl font-medium text-blue-100 mt-6 mb-2">Mantenimiento a realizar</h4>
-      <p class="text-blue-200 mb-4">
-        En esta práctica se ejecutará un mantenimiento <strong>preventivo y correctivo</strong> de los equipos de cómputo pertenecientes a la institución “Luisa Cáceres de Arizmendi”.
-        Se realizará limpieza interna y externa, revisión del hardware, reinstalación de sistemas operativos cuando sea necesario y verificación del correcto funcionamiento de los periféricos.
-      </p>
-      <h4 class="text-xl font-medium text-blue-100 mt-6 mb-2">Componentes del sistema</h4>
-      <ul class="list-disc ml-6 text-blue-200 space-y-2">
-        <li><strong>Hardware:</strong> Placa madre, procesador, memoria RAM, fuente de poder, discos duros, tarjetas gráficas, periféricos, etc.</li>
-        <li><strong>Software:</strong> Sistema operativo, controladores, aplicaciones de oficina, antivirus y programas educativos.</li>
-        <li><strong>Periféricos:</strong> Monitores, teclados, mouse, impresoras, y dispositivos de almacenamiento externo.</li>
-      </ul>
-    </section>
-
-    <!-- ====== Computadoras ====== -->
-    <section id="computadoras" class="mb-10">
-      <h3 class="text-2xl font-semibold mb-4 text-blue-100">Computadoras</h3>
-      <div class="grid md:grid-cols-2 gap-6">
-        <div class="bg-blue-200/10 border border-blue-300 rounded-xl shadow-lg overflow-hidden cursor-pointer hover:scale-[1.02] transition" onclick="openPanel('antes')">
-          <img src="pc7.jpg" class="w-full aspect-square object-cover">
-          <div class="px-4 py-3 text-blue-100 font-medium text-center bg-blue-900/60 hover:bg-blue-700/50 transition">Antes del mantenimiento</div>
+      
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="glass p-8 rounded-3xl text-center border border-blue-400/20 hover-lift group">
+          <div class="relative mb-6 inline-block">
+            <div class="absolute inset-0 bg-blue-500 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
+            <img src="abraham.jpg" alt="Abraham Valdivia" class="relative w-32 h-32 mx-auto rounded-full object-cover border-4 border-blue-400/30 shadow-2xl group-hover:scale-110 transition-transform duration-500">
+          </div>
+          <h4 class="text-xl font-bold text-white mb-2">Abraham Valdivia</h4>
+          <p class="text-blue-300 text-sm mb-4">Desarrollador</p>
+          <div class="inline-block px-4 py-2 bg-blue-600/20 rounded-full text-xs text-blue-300 border border-blue-500/30">
+            UPTA Federico Brito Figueroa
+          </div>
         </div>
-        <div class="bg-blue-200/10 border border-blue-300 rounded-xl shadow-lg overflow-hidden cursor-pointer hover:scale-[1.02] transition" onclick="openPanel('despues')">
-          <img src="computadoras-despues1.jpg" class="w-full aspect-square object-cover">
-          <div class="px-4 py-3 text-blue-100 font-medium text-center bg-blue-900/60 hover:bg-blue-700/50 transition">Después del mantenimiento</div>
+
+        <div class="glass p-8 rounded-3xl text-center border border-blue-400/20 hover-lift group">
+          <div class="relative mb-6 inline-block">
+            <div class="absolute inset-0 bg-blue-500 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
+            <img src="ramces.jpg" alt="Ramces Colmenares" class="relative w-32 h-32 mx-auto rounded-full object-cover border-4 border-blue-400/30 shadow-2xl group-hover:scale-110 transition-transform duration-500">
+          </div>
+          <h4 class="text-xl font-bold text-white mb-2">Ramces Colmenares</h4>
+          <p class="text-blue-300 text-sm mb-4">Desarrollador</p>
+          <div class="inline-block px-4 py-2 bg-blue-600/20 rounded-full text-xs text-blue-300 border border-blue-500/30">
+            UPTA Federico Brito Figueroa
+          </div>
+        </div>
+
+        <div class="glass p-8 rounded-3xl text-center border border-blue-400/20 hover-lift group">
+          <div class="relative mb-6 inline-block">
+            <div class="absolute inset-0 bg-blue-500 rounded-full blur-xl opacity-30 group-hover:opacity-50 transition-opacity"></div>
+            <img src="angel.jpg" alt="Ángel Velásquez" class="relative w-32 h-32 mx-auto rounded-full object-cover border-4 border-blue-400/30 shadow-2xl group-hover:scale-110 transition-transform duration-500">
+          </div>
+          <h4 class="text-xl font-bold text-white mb-2">Ángel Velásquez</h4>
+          <p class="text-blue-300 text-sm mb-4">Desarrollador</p>
+          <div class="inline-block px-4 py-2 bg-blue-600/20 rounded-full text-xs text-blue-300 border border-blue-500/30">
+            UPTA Federico Brito Figueroa
+          </div>
         </div>
       </div>
     </section>
 
-   <section id="mantenimiento" class="mb-10 bg-blue-100/10 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-blue-300/40">
-  <h3 class="text-2xl font-semibold mb-6 text-blue-100">Pasos para el mantenimiento de computadoras</h3>
+    <!-- Footer -->
+    <footer class="text-center py-8 text-blue-400/60 border-t border-blue-400/20">
+      <p>© <span id="year-footer">2024</span> Comunidad Luisa Cáceres de Arizmendi. Todos los derechos reservados.</p>
+    </footer>
 
-  <!-- Grid de pasos -->
-  <div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
-      <p class="text-blue-200 font-medium">Paso 1: Desconexión y seguridad</p>
-      <p class="text-blue-200 text-sm mt-1">Apagar y desconectar el equipo de la corriente eléctrica.</p>
-    </div>
-    <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
-      <p class="text-blue-200 font-medium">Paso 2: Limpieza externa</p>
-      <p class="text-blue-200 text-sm mt-1">Retirar polvo y suciedad del exterior con paño seco.</p>
-    </div>
-    <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
-      <p class="text-blue-200 font-medium">Paso 3: Limpieza interna</p>
-      <p class="text-blue-200 text-sm mt-1">Abrir el gabinete y limpiar componentes utilizando aire comprimido.</p>
-    </div>
-    <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
-      <p class="text-blue-200 font-medium">Paso 4: Revisión del hardware</p>
-      <p class="text-blue-200 text-sm mt-1">Verificar RAM, cables, ventiladores y salud del disco.</p>
-    </div>
-    <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
-      <p class="text-blue-200 font-medium">Paso 5: Mantenimiento del software</p>
-      <p class="text-blue-200 text-sm mt-1">Actualizar sistema operativo, controladores y antivirus.</p>
-    </div>
-    <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
-      <p class="text-blue-200 font-medium">Paso 6: Pruebas finales</p>
-      <p class="text-blue-200 text-sm mt-1">Encender el equipo y comprobar su correcto funcionamiento.</p>
-    </div>
-  </div>
-
-<!-- Herramientas utilizadas -->
-<h3 class="text-2xl font-semibold mt-10 mb-6 text-blue-100">Herramientas básicas para el buen mantenimiento a las PC</h3>
-<div class="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
-    <p class="text-blue-200 font-medium">Aire comprimido</p>
-    <p class="text-blue-200 text-sm mt-1">Se utiliza para limpiar polvo y suciedad interna de los componentes. Parte de las herramientas de limpieza junto con alcohol isopropílico, hisopos de algodón y paños de microfibra.</p>
-  </div>
-  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
-    <p class="text-blue-200 font-medium">Destornilladores</p>
-    <p class="text-blue-200 text-sm mt-1">Permiten desmontar y ajustar piezas del hardware. Ideal contar con un kit de destornilladores completo para diferentes tipos de tornillos.</p>
-  </div>
-  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
-    <p class="text-blue-200 font-medium">Pinceles antiestáticos</p>
-    <p class="text-blue-200 text-sm mt-1">Ayudan a limpiar superficies delicadas sin generar electricidad estática. Muy útiles junto con brochas antiestáticas para limpiar componentes internos.</p>
-  </div>
-  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
-    <p class="text-blue-200 font-medium">Alcohol isopropílico</p>
-    <p class="text-blue-200 text-sm mt-1">Se utiliza para limpiar contactos y componentes electrónicos sin dañarlos. Funciona junto con hisopos de algodón y paños de microfibra para un mantenimiento seguro.</p>
-  </div>
-  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
-    <p class="text-blue-200 font-medium">Multímetro</p>
-    <p class="text-blue-200 text-sm mt-1">Permite medir voltaje, corriente y continuidad de los componentes eléctricos, garantizando que todo funcione correctamente.</p>
-  </div>
-  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
-    <p class="text-blue-200 font-medium">Software de diagnóstico</p>
-    <p class="text-blue-200 text-sm mt-1">Sirve para revisar la salud del hardware y detectar fallas del sistema. También puede complementar el mantenimiento físico asegurando un funcionamiento óptimo.</p>
-  </div>
-  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
-    <p class="text-blue-200 font-medium">Pulsera antiestática y pasta térmica</p>
-    <p class="text-blue-200 text-sm mt-1">La pulsera antiestática protege los componentes internos al manipularlos, mientras que la pasta térmica garantiza una correcta disipación del calor del procesador.</p>
-  </div>
-  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
-    <p class="text-blue-200 font-medium">Paños de microfibra adicionales</p>
-    <p class="text-blue-200 text-sm mt-1">Se utilizan para limpiar superficies externas y pantallas sin rayarlas, complementando el kit de limpieza para pantallas.</p>
-  </div>
-  <div class="bg-white/20 p-4 rounded-lg border border-blue-300 shadow-md">
-    <p class="text-blue-200 font-medium">Kit de limpieza para teclados y pantallas</p>
-    <p class="text-blue-200 text-sm mt-1">Incluye hisopos, paños de microfibra y productos específicos para limpiar teclados, monitores y superficies externas de manera segura.</p>
-  </div>
-</div>
-
-
-</section>
-
-
-<!-- ====== Contenedor para dos videos ====== -->
-<section class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-
-  <!-- ====== Video local de ejemplo (más pequeño) ====== -->
-  <div class="bg-blue-100/10 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-blue-300/40">
-    <h3 class="text-xl font-semibold mb-4 text-blue-100">Ejemplo práctico 1</h3>
-    <div class="rounded-xl overflow-hidden border border-blue-300 shadow-md">
-      <video controls class="w-full rounded-xl">
-        <source src="videos/mantenimiento.mp4" type="video/mp4">
-        Tu navegador no soporta la reproducción de videos.
-      </video>
-    </div>
-  </div>
-
-  <!-- ====== Espacio para segundo video o contenido ====== -->
-  <div class="bg-blue-100/10 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-blue-300/40">
-    <h3 class="text-xl font-semibold mb-4 text-blue-100">Ejemplo práctico 2 a seguir</h3>
-    <div class="rounded-xl overflow-hidden border border-blue-300 shadow-md">
-      <!-- Aquí puedes poner otro video -->
-      <video controls class="w-full rounded-xl">
-        <source src="videos/otro_video.mp4" type="video/mp4">
-        Tu navegador no soporta la reproducción de videos.
-      </video>
-    </div>
-  </div>
-</section>
-
-<!-- ====== BOTÓN DEL GLOSARIO ====== -->
-<div class="w-full flex justify-center my-10">
-  <button onclick="document.getElementById('glosario').classList.toggle('hidden')" 
-    class="w-full md:w-2/3 lg:w-1/2 py-5 bg-blue-600 text-white text-2xl font-bold rounded-2xl shadow-xl hover:bg-blue-500 transition">
-    Glosario Informático
-  </button>
-</div>
-
-<!-- ====== PANEL DEL GLOSARIO ====== -->
-<section id="glosario" class="hidden bg-white/10 backdrop-blur-lg border border-blue-300 rounded-2xl p-6 text-blue-100 shadow-xl">
-
-  <h2 class="text-3xl font-bold mb-6 text-center">Glosario Informático</h2>
-
-  <div class="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 mb-6">
-    <!-- letras A-Z -->
-    <button onclick="showGlossary('A')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">A</button>
-    <button onclick="showGlossary('B')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">B</button>
-    <button onclick="showGlossary('C')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">C</button>
-    <button onclick="showGlossary('D')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">D</button>
-    <button onclick="showGlossary('E')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">E</button>
-    <button onclick="showGlossary('F')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">F</button>
-    <button onclick="showGlossary('G')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">G</button>
-    <button onclick="showGlossary('H')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">H</button>
-    <button onclick="showGlossary('I')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">I</button>
-    <button onclick="showGlossary('J')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">J</button>
-    <button onclick="showGlossary('K')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">K</button>
-    <button onclick="showGlossary('L')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">L</button>
-    <button onclick="showGlossary('M')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">M</button>
-    <button onclick="showGlossary('N')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">N</button>
-    <button onclick="showGlossary('O')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">O</button>
-    <button onclick="showGlossary('P')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">P</button>
-    <button onclick="showGlossary('Q')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">Q</button>
-    <button onclick="showGlossary('R')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">R</button>
-    <button onclick="showGlossary('S')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">S</button>
-    <button onclick="showGlossary('T')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">T</button>
-    <button onclick="showGlossary('U')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">U</button>
-    <button onclick="showGlossary('V')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">V</button>
-    <button onclick="showGlossary('W')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">W</button>
-    <button onclick="showGlossary('X')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">X</button>
-    <button onclick="showGlossary('Y')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">Y</button>
-    <button onclick="showGlossary('Z')" class="py-2 bg-blue-700 hover:bg-blue-500 rounded-lg">Z</button>
-  </div>
-
-  <!-- Contenedor de información -->
-  <div id="glosario-info" class="p-4 bg-blue-900/40 rounded-xl border border-blue-300 text-blue-100">
-    <h3 class="text-xl font-bold">Selecciona una letra</h3>
-    <p class="text-sm mt-2">Toca una letra del glosario para ver los términos correspondientes.</p>
-  </div>
-</section>
-
-
-    <!-- ====== Desarrolladores ====== -->
-    <section id="desarrolladores" class="bg-blue-100/10 backdrop-blur-md p-8 rounded-2xl shadow-xl border border-blue-300/30 mb-10">
-      <h3 class="text-xl font-semibold mb-6 text-blue-100 text-center">Desarrolladores</h3>
-      <div class="grid md:grid-cols-3 gap-6 text-center">
-        <div class="p-4 bg-blue-200/10 rounded-xl border border-blue-300 shadow-md hover:scale-105 transition">
-          <img src="abraham.jpg" alt="Abraham Valdivia" class="w-32 h-32 mx-auto rounded-full object-cover mb-4 border border-blue-300 shadow-md">
-          <h4 class="text-blue-50 font-semibold">Abraham Valdivia</h4>
-          <p class="text-blue-200 text-sm italic">Estudiante de PNF de Informática, Trayecto I de la UPTA Federico Brito Figueroa.</p>
-        </div>
-        <div class="p-4 bg-blue-200/10 rounded-xl border border-blue-300 shadow-md hover:scale-105 transition">
-          <img src="ramces.jpg" alt="Ramces Colmenares" class="w-32 h-32 mx-auto rounded-full object-cover mb-4 border border-blue-300 shadow-md">
-          <h4 class="text-blue-50 font-semibold">Ramces Colmenares</h4>
-          <p class="text-blue-200 text-sm italic">Estudiante de PNF de Informática, Trayecto I de la UPTA Federico Brito Figueroa.</p>
-        </div>
-        <div class="p-4 bg-blue-200/10 rounded-xl border border-blue-300 shadow-md hover:scale-105 transition">
-          <img src="angel.jpg" alt="Ángel Velásquez" class="w-32 h-32 mx-auto rounded-full object-cover mb-4 border border-blue-300 shadow-md">
-          <h4 class="text-blue-50 font-semibold">Ángel Velásquez</h4>
-          <p class="text-blue-200 text-sm italic">Estudiante de PNF de Informática, Trayecto I de la UPTA Federico Brito Figueroa.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====== Panel flotante (GALERÍA) ====== -->
-    <div id="overlay" class="overlay">
-      <div class="panel">
+    <!-- Panels -->
+    <div id="overlay" class="overlay" onclick="if(event.target === this) closePanel()">
+      <div class="panel" onclick="event.stopPropagation()">
         <div class="close-btn" onclick="closePanel()">✕</div>
-        <div id="panel-content"></div>
+        <h3 id="panel-title" class="text-3xl font-bold text-blue-900 mb-8 text-center serif"></h3>
+        <div id="panel-content" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"></div>
+      </div>
+    </div>
+
+    <div id="image-modal" class="overlay" onclick="if(event.target === this) closeImageModal()">
+      <div class="max-w-4xl w-full mx-4" onclick="event.stopPropagation()">
+        <div class="close-btn" onclick="closeImageModal()" style="top: -50px; right: 0;">✕</div>
+        <img id="modal-img" src="" alt="" class="w-full rounded-2xl shadow-2xl">
+        <p id="modal-caption" class="text-center text-white mt-4 text-lg"></p>
       </div>
     </div>
 
   </div>
 
   <script>
-document.addEventListener('DOMContentLoaded', () => {
+    // Intro - Generar números binarios
+    const binaryContainer = document.getElementById('binary-container');
+    for (let i = 0; i < 20; i++) {
+      const span = document.createElement('span');
+      span.className = 'binary';
+      span.style.left = Math.random() * 100 + '%';
+      span.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      span.style.animationDelay = Math.random() * 2 + 's';
+      span.textContent = Math.random() > 0.5 ? '1' : '0';
+      binaryContainer.appendChild(span);
+    }
 
-  // Carrusel
-  const imgs = document.querySelectorAll('header .carousel-img');
-  let i = 0;
-  setInterval(() => {
-    imgs[i].classList.remove('active');
-    i = (i + 1) % imgs.length;
-    imgs[i].classList.add('active');
-  }, 4000);
+    // Ocultar intro después de la animación
+    setTimeout(() => {
+      document.getElementById('intro').style.display = 'none';
+    }, 3800);
 
-  // Contenido de las computadoras
-  const content = {
-    antes: Array.from({length:7}, (_,i)=>({
-      img: `computadoras-antes${i+1}.jpg`,
-      desc: `Computadora antes del mantenimiento #${i+1}`
-    })),
-    despues: Array.from({length:7}, (_,i)=>({
-      img: `computadoras-despues${i+1}.jpg`,
-      desc: `Computadora después del mantenimiento #${i+1}`
-    }))
-  };
+    // Sidebar Toggle
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('expanded');
+    }
 
-  // Abrir panel
-  window.openPanel = function(type) {
-    const container = document.getElementById('panel-content');
-    container.innerHTML = '';
-    content[type].forEach(c => {
-      const div = document.createElement('div');
-      div.classList.add('text-center');
-      div.innerHTML = `<img src="${c.img}" alt="${c.desc}"><p class="mt-1 text-blue-800 text-sm">${c.desc}</p>`;
-      container.appendChild(div);
+    // Actualizar años
+    const currentYear = new Date().getFullYear();
+    document.getElementById('year-footer').textContent = currentYear;
+
+    // Carrusel
+    const carouselImgs = document.querySelectorAll('.carousel-img');
+    let currentImg = 0;
+    setInterval(() => {
+      carouselImgs[currentImg].classList.remove('active');
+      currentImg = (currentImg + 1) % carouselImgs.length;
+      carouselImgs[currentImg].classList.add('active');
+    }, 5000);
+
+    // Datos de paneles
+    const galleryData = {
+      antes: {
+        title: "Antes del Mantenimiento",
+        items: Array.from({length:7}, (_,i)=>({
+          img:`computadoras-antes${i+1}.jpg`, 
+          desc:`Estado inicial #${i+1}`
+        }))
+      },
+      despues: {
+        title: "Después del Mantenimiento",
+        items: Array.from({length:7}, (_,i)=>({
+          img:`computadoras-despues${i+1}.jpg`, 
+          desc:`Resultado final #${i+1}`
+        }))
+      }
+    };
+
+    function openPanel(type) {
+      const overlay = document.getElementById('overlay');
+      const container = document.getElementById('panel-content');
+      const title = document.getElementById('panel-title');
+      
+      title.textContent = galleryData[type].title;
+      container.innerHTML = '';
+      
+      galleryData[type].items.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'group cursor-pointer';
+        div.onclick = () => openImage(c.img, c.desc);
+        div.innerHTML = `
+          <div class="relative overflow-hidden rounded-xl aspect-square">
+            <img src="${c.img}" alt="${c.desc}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+            <div class="absolute inset-0 bg-blue-900/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <p class="text-white text-center px-2 text-sm">${c.desc}</p>
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+      
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function openImage(src, caption) {
+      const modal = document.getElementById('image-modal');
+      document.getElementById('modal-img').src = src;
+      document.getElementById('modal-caption').textContent = caption;
+      modal.classList.add('active');
+    }
+
+    function closeImageModal() {
+      document.getElementById('image-modal').classList.remove('active');
+    }
+
+    function closePanel() {
+      document.getElementById('overlay').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // Cerrar con Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closePanel();
+        closeImageModal();
+      }
     });
-    document.getElementById('overlay').style.display = 'flex';
-  };
 
-  // Cerrar panel
-  window.closePanel = function() {
-    document.getElementById('overlay').style.display = 'none';
-  };
+    // Animación al scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('fade-in');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
 
+    document.querySelectorAll('section').forEach(section => {
+      observer.observe(section);
+    });
+  </script>
+
+<!-- ===== ELI.AI WIDGET - VERSIÓN FINAL ===== -->
+
+<div id="eli-widget" style="position:fixed;bottom:20px;right:20px;z-index:9999;font-family:system-ui,sans-serif;">
+  
+  <div id="eli-chat" style="display:none;width:450px;height:450px;background:#0f172a;border-radius:16px;border:1px solid #3b82f6;box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);margin-bottom:12px;overflow:hidden;flex-direction:column;">
+    
+    <div style="background:linear-gradient(90deg,#2563eb,#1d4ed8);padding:16px;display:flex;align-items:center;justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <img src="eli-avatar.png" style="width:36px;height:36px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.3);">
+        <div>
+          <div style="color:white;font-weight:bold;font-size:14px;">Eli.ai</div>
+          <div style="color:#93c5fd;font-size:11px;display:flex;align-items:center;gap:4px;">
+            <span style="width:6px;height:6px;background:#4ade80;border-radius:50%;"></span>
+            En línea
+          </div>
+        </div>
+      </div>
+      <button id="eli-close-btn" style="background:none;border:none;color:white;cursor:pointer;font-size:18px;padding:4px;">✕</button>
+    </div>
+    
+    <div id="eli-messages" style="flex:1;overflow-y:auto;padding:16px;background:#020617;">
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <img src="eli-avatar.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">
+        <div style="background:rgba(37,99,235,0.2);border:1px solid rgba(59,130,246,0.3);border-radius:12px;border-top-left-radius:4px;padding:10px 12px;color:#dbeafe;font-size:13px;line-height:1.5;">
+          ¡Hola! Soy Eli.ai. Pregúntame sobre mantenimiento de PC, Linux, Windows, hardware o software. 💻
+        </div>
+      </div>
+    </div>
+    
+    <div style="padding:12px;background:#0f172a;border-top:1px solid rgba(59,130,246,0.2);">
+      <div style="display:flex;gap:8px;">
+        <input type="text" id="eli-input" placeholder="Escribe tu pregunta..." 
+               style="flex:1;background:#1e293b;border:1px solid rgba(59,130,246,0.3);border-radius:8px;padding:10px 12px;color:white;font-size:13px;outline:none;">
+        <button id="eli-send-btn" style="background:#2563eb;color:white;border:none;border-radius:8px;padding:10px 14px;cursor:pointer;font-size:13px;">Enviar</button>
+      </div>
+    </div>
+  </div>
+  
+  <button id="eli-toggle-btn" style="width:100px;height:100px;background:linear-gradient(135deg,#2563eb,#1d4ed8);border-radius:50%;border:3px solid #0f172a;box-shadow:0 10px 25px rgba(37,99,235,0.4);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform 0.2s;margin-left:auto;padding:0;overflow:hidden;">
+    <img src="eli-avatar.png" style="width:100%;height:100%;object-fit:cover;">
+  </button>
+</div>
+
+<script>
+// ===== CONFIGURACIÓN =====
+const GEMINI_KEY = 'AIzaSyBEoFzpW4eCxV-UNZB9l2ZjXzdPACyrX-g';
+const MODEL_NAME = 'gemini-2.5-flash';
+
+// ===== REFERENCIAS DOM =====
+const eliChat = document.getElementById('eli-chat');
+const eliInput = document.getElementById('eli-input');
+const eliMessages = document.getElementById('eli-messages');
+
+// ===== EVENT LISTENERS =====
+document.getElementById('eli-toggle-btn').addEventListener('click', toggleEli);
+document.getElementById('eli-close-btn').addEventListener('click', toggleEli);
+document.getElementById('eli-send-btn').addEventListener('click', sendEli);
+eliInput.addEventListener('keypress', (e) => {
+  if(e.key === 'Enter') sendEli();
 });
-</script>
 
-<script>
-const glosarioData = {
+function toggleEli() {
+  const isHidden = eliChat.style.display === 'none' || eliChat.style.display === '';
+  eliChat.style.display = isHidden ? 'flex' : 'none';
+  if(isHidden) eliInput.focus();
+}
 
-A: [
-  { titulo: "Almacenamiento", texto: "Componente donde se guardan archivos." },
-  { titulo: "Archivo", texto: "Conjunto de datos guardado con un nombre." },
-  { titulo: "Algoritmo", texto: "Secuencia de pasos para resolver un problema." },
-  { titulo: "API", texto: "Interfaz para conectar aplicaciones." },
-  { titulo: "Antivirus", texto: "Software que detecta y elimina amenazas." }
-],
-
-B: [
-  { titulo: "BIOS", texto: "Sistema básico de entrada y salida." },
-  { titulo: "Backup", texto: "Copia de seguridad de datos." },
-  { titulo: "Bit", texto: "Unidad mínima de información." },
-  { titulo: "Bluetooth", texto: "Tecnología de conexión inalámbrica." },
-  { titulo: "Boot", texto: "Proceso de arranque del sistema." }
-],
-
-C: [
-  { titulo: "CPU", texto: "Ejecuta instrucciones del sistema." },
-  { titulo: "Cache", texto: "Memoria rápida que acelera procesos." },
-  { titulo: "Computadora", texto: "Máquina que procesa información." },
-  { titulo: "Código Fuente", texto: "Instrucciones escritas en un lenguaje." },
-  { titulo: "Compilador", texto: "Programa que traduce código a ejecutable." }
-],
-
-D: [
-  { titulo: "Driver", texto: "Controlador que permite que el hardware funcione." },
-  { titulo: "Datos", texto: "Información que se procesa o almacena." },
-  { titulo: "DNS", texto: "Sistema que traduce nombres de dominio a IP." },
-  { titulo: "Depuración", texto: "Proceso de encontrar y corregir errores." },
-  { titulo: "Descarga", texto: "Transferencia de datos desde Internet al dispositivo." }
-],
-
-E: [
-  { titulo: "Ethernet", texto: "Conexión de red cableada." },
-  { titulo: "Editor", texto: "Programa para modificar texto o código." },
-  { titulo: "Email", texto: "Correo electrónico." },
-  { titulo: "Encriptación", texto: "Proceso de codificar información para seguridad." },
-  { titulo: "Error", texto: "Falla o problema en el sistema." }
-],
-
-F: [
-  { titulo: "Firewall", texto: "Sistema de seguridad que controla el tráfico de red." },
-  { titulo: "Firmware", texto: "Software básico integrado en hardware." },
-  { titulo: "Formato", texto: "Estructura o disposición de datos." },
-  { titulo: "Función", texto: "Bloque de código que realiza una tarea específica." },
-  { titulo: "Fuente de Poder", texto: "Suministra energía eléctrica a la computadora." }
-],
-
-G: [
-  { titulo: "GPU", texto: "Procesador gráfico encargado de imágenes y videos." },
-  { titulo: "Gestor de Archivos", texto: "Programa para organizar y manejar archivos." },
-  { titulo: "Gigabyte", texto: "Unidad de almacenamiento de datos." },
-  { titulo: "Grupo de Trabajo", texto: "Conjunto de computadoras en una red local." },
-  { titulo: "GUI", texto: "Interfaz gráfica de usuario." }
-],
-
-H: [
-  { titulo: "Hardware", texto: "Parte física de una computadora." },
-  { titulo: "HTML", texto: "Lenguaje de marcado para páginas web." },
-  { titulo: "HTTP", texto: "Protocolo para transferir información web." },
-  { titulo: "Host", texto: "Equipo que proporciona servicios en red." },
-  { titulo: "HDD", texto: "Disco duro tradicional de almacenamiento." }
-],
-
-I: [
-  { titulo: "IP", texto: "Dirección que identifica un dispositivo en la red." },
-  { titulo: "Interfaz", texto: "Medio por el cual el usuario interactúa con la computadora." },
-  { titulo: "Input", texto: "Entrada de datos hacia el sistema." },
-  { titulo: "Instalación", texto: "Proceso de añadir software al sistema." },
-  { titulo: "Internet", texto: "Red mundial de computadoras interconectadas." }
-],
-
-J: [
-  { titulo: "Java", texto: "Lenguaje de programación popular." },
-  { titulo: "JSON", texto: "Formato de intercambio de datos." },
-  { titulo: "Joystick", texto: "Dispositivo de control para juegos." },
-  { titulo: "JDK", texto: "Kit de desarrollo para Java." },
-  { titulo: "JPEG", texto: "Formato de imagen comprimida." }
-],
-
-K: [
-  { titulo: "Kernel", texto: "Núcleo del sistema operativo." },
-  { titulo: "Keylogger", texto: "Software que registra teclas presionadas." },
-  { titulo: "Kbps", texto: "Unidad de velocidad de transmisión de datos." },
-  { titulo: "Kickstart", texto: "Proceso de arranque de algunos sistemas Linux." },
-  { titulo: "Keyboard", texto: "Teclado de computadora." }
-],
-
-L: [
-  { titulo: "LAN", texto: "Red de área local." },
-  { titulo: "Linux", texto: "Sistema operativo de código abierto." },
-  { titulo: "Lenguaje de Programación", texto: "Sistema para crear software." },
-  { titulo: "Login", texto: "Proceso de acceso a un sistema." },
-  { titulo: "Link", texto: "Enlace que conecta páginas o recursos." }
-],
-
-M: [
-  { titulo: "Malware", texto: "Software malicioso." },
-  { titulo: "Modem", texto: "Dispositivo que conecta a Internet." },
-  { titulo: "Motherboard", texto: "Placa principal de la computadora." },
-  { titulo: "Megabyte", texto: "Unidad de almacenamiento de datos." },
-  { titulo: "Monitor", texto: "Pantalla de la computadora." }
-],
-
-N: [
-  { titulo: "Nodo", texto: "Punto de conexión en una red." },
-  { titulo: "Nombre de Dominio", texto: "Dirección legible de un sitio web." },
-  { titulo: "Networking", texto: "Conexión y gestión de redes." },
-  { titulo: "Navegador", texto: "Programa para visitar sitios web." },
-  { titulo: "Null", texto: "Valor vacío o inexistente en programación." }
-],
-
-O: [
-  { titulo: "OS", texto: "Sistema operativo." },
-  { titulo: "Open Source", texto: "Software de código abierto." },
-  { titulo: "Overclocking", texto: "Acelerar hardware más allá de lo recomendado." },
-  { titulo: "Online", texto: "Conectado a Internet." },
-  { titulo: "Output", texto: "Salida de datos del sistema." }
-],
-
-P: [
-  { titulo: "PHP", texto: "Lenguaje de programación para web." },
-  { titulo: "Puerto", texto: "Entrada o salida de comunicación en red." },
-  { titulo: "Ping", texto: "Prueba de conectividad en red." },
-  { titulo: "Python", texto: "Lenguaje de programación versátil." },
-  { titulo: "Patch", texto: "Actualización para corregir errores de software." }
-],
-
-Q: [
-  { titulo: "Query", texto: "Consulta a una base de datos." },
-  { titulo: "Queue", texto: "Cola de procesos o datos." },
-  { titulo: "QoS", texto: "Calidad de servicio en redes." },
-  { titulo: "Quark", texto: "Unidad elemental en física, usada a veces en informática teórica." },
-  { titulo: "QuickSort", texto: "Algoritmo de ordenamiento rápido." }
-],
-
-R: [
-  { titulo: "RAM", texto: "Memoria de acceso aleatorio." },
-  { titulo: "Router", texto: "Dispositivo que dirige tráfico de red." },
-  { titulo: "Root", texto: "Usuario con permisos máximos." },
-  { titulo: "Registro", texto: "Lugar donde se almacenan configuraciones." },
-  { titulo: "Runtime", texto: "Tiempo de ejecución de un programa." }
-],
-
-S: [
-  { titulo: "Software", texto: "Programas y aplicaciones." },
-  { titulo: "Servidor", texto: "Equipo que proporciona servicios en red." },
-  { titulo: "Script", texto: "Código que se ejecuta automáticamente." },
-  { titulo: "SSID", texto: "Nombre de la red Wi-Fi." },
-  { titulo: "Stack", texto: "Estructura de datos tipo pila." }
-],
-
-T: [
-  { titulo: "TCP/IP", texto: "Protocolos principales de Internet." },
-  { titulo: "Trojan", texto: "Malware que se oculta como software legítimo." },
-  { titulo: "Terminal", texto: "Interfaz de línea de comandos." },
-  { titulo: "Teclado", texto: "Dispositivo de entrada de texto." },
-  { titulo: "Token", texto: "Elemento de seguridad o autenticación." }
-],
-
-U: [
-  { titulo: "USB", texto: "Puerto universal para conectar dispositivos." },
-  { titulo: "URL", texto: "Dirección de un recurso web." },
-  { titulo: "Usuario", texto: "Persona que usa un sistema." },
-  { titulo: "UDP", texto: "Protocolo de comunicación de red." },
-  { titulo: "Ubuntu", texto: "Distribución de Linux." }
-],
-
-V: [
-  { titulo: "VPN", texto: "Red privada virtual." },
-  { titulo: "Virus", texto: "Programa que daña el sistema." },
-  { titulo: "Variable", texto: "Almacena datos en programación." },
-  { titulo: "Virtualización", texto: "Crear entornos virtuales de hardware." },
-  { titulo: "Vector", texto: "Estructura de datos lineal." }
-],
-
-W: [
-  { titulo: "Wi-Fi", texto: "Conexión inalámbrica a Internet." },
-  { titulo: "Windows", texto: "Sistema operativo de Microsoft." },
-  { titulo: "Web", texto: "Conjunto de sitios y servicios online." },
-  { titulo: "Widget", texto: "Elemento gráfico en aplicaciones." },
-  { titulo: "Worm", texto: "Malware que se propaga solo." }
-],
-
-X: [
-  { titulo: "XML", texto: "Lenguaje de marcado para datos." },
-  { titulo: "XSS", texto: "Vulnerabilidad de seguridad en web." },
-  { titulo: "Xen", texto: "Hipervisor para virtualización." },
-  { titulo: "Xbox", texto: "Consola de videojuegos." },
-  { titulo: "Xcode", texto: "Entorno de desarrollo para Apple." }
-],
-
-Y: [
-  { titulo: "Y2K", texto: "Problema de año 2000 en software antiguo." },
-  { titulo: "Yarn", texto: "Gestor de paquetes para Node.js." },
-  { titulo: "Yottabyte", texto: "Unidad de almacenamiento enorme." },
-  { titulo: "YAML", texto: "Formato de serialización de datos." },
-  { titulo: "YouTube", texto: "Plataforma de videos online." }
-],
-
-Z: [
-  { titulo: "Zip", texto: "Formato de compresión de archivos." },
-  { titulo: "Zebra", texto: "Marca de impresoras de códigos de barra." },
-  { titulo: "Zero-day", texto: "Vulnerabilidad desconocida en software." },
-  { titulo: "Zombie", texto: "Computadora comprometida en una botnet." },
-  { titulo: "Zoom", texto: "Aplicación de videollamadas." }
-]
-
-};
-
-</script>
-
-<script>
-function showGlossary(letra) {
-  const box = document.getElementById("glosario-info");
-
-  // Revisar si la letra tiene términos
-  if (glosarioData[letra] && glosarioData[letra].length > 0) {
-    let html = '';
-    glosarioData[letra].forEach(item => {
-      html += `
-        <h3 class="text-2xl font-bold mb-1">${item.titulo}</h3>
-        <p class="text-blue-200 mb-3">${item.texto}</p>
-      `;
+async function sendEli() {
+  const msg = eliInput.value.trim();
+  if(!msg) return;
+  
+  addMsg(msg, 'user');
+  eliInput.value = '';
+  const loadId = addMsg('...', 'loading');
+  
+  try {
+    const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${GEMINI_KEY}`;
+    
+    const res = await fetch(API_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        contents: [{
+          role: 'user',
+          parts: [{text: `Eres Eli.ai, experto técnico en mantenimiento de computadoras, hardware, software, Linux y Windows. Responde de forma técnica pero clara en español. Sé conciso. Pregunta: ${msg}`}]
+        }]
+      })
     });
-    box.innerHTML = html;
-  } else {
-    box.innerHTML = `
-      <h3 class="text-2xl font-bold mb-2">Sin información</h3>
-      <p class="text-blue-200">No hay datos para la letra <strong>${letra}</strong>.</p>
-    `;
+    
+    if(!res.ok) {
+      const err = await res.json();
+      throw new Error(JSON.stringify(err));
+    }
+    
+    const data = await res.json();
+    
+    if(!data.candidates || !data.candidates[0] || !data.candidates[0].content) {
+      throw new Error('Respuesta vacía');
+    }
+    
+    const reply = data.candidates[0].content.parts[0].text;
+    document.getElementById(loadId).remove();
+    addMsg(reply, 'bot');
+    
+  } catch(e) {
+    console.error('Error:', e);
+    document.getElementById(loadId)?.remove();
+    addMsg('❌ Error de conexión. Intenta de nuevo.', 'bot');
   }
 }
-</script>
 
+function addMsg(text, type) {
+  const div = document.createElement('div');
+  const id = 'm' + Date.now();
+  div.id = id;
+  div.style.cssText = 'display:flex;gap:8px;margin-bottom:12px;' + (type === 'user' ? 'flex-direction:row-reverse;' : '');
+  
+  const imgAvatar = '<img src="eli-avatar.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;flex-shrink:0;">';
+  const userAvatar = '<div style="width:28px;height:28px;background:#3b82f6;border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;flex-shrink:0;">👤</div>';
+  
+  if(type === 'user') {
+    div.innerHTML = userAvatar + '<div style="background:#3b82f6;border-radius:12px;border-top-right-radius:4px;padding:10px 12px;color:white;font-size:13px;max-width:80%;">' + escape(text) + '</div>';
+  } else if(type === 'loading') {
+    div.innerHTML = imgAvatar + '<div style="background:rgba(37,99,235,0.2);border:1px solid rgba(59,130,246,0.3);border-radius:12px;border-top-left-radius:4px;padding:10px 12px;color:#93c5fd;font-size:13px;">Escribiendo...</div>';
+  } else {
+    div.innerHTML = imgAvatar + '<div style="background:rgba(37,99,235,0.2);border:1px solid rgba(59,130,246,0.3);border-radius:12px;border-top-left-radius:4px;padding:10px 12px;color:#dbeafe;font-size:13px;line-height:1.5;max-width:80%;">' + format(text) + '</div>';
+  }
+  
+  eliMessages.appendChild(div);
+  eliMessages.scrollTop = eliMessages.scrollHeight;
+  return id;
+}
+
+function escape(t) {
+  const d = document.createElement('div');
+  d.textContent = t;
+  return d.innerHTML;
+}
+
+function format(t) {
+  return escape(t).replace(/\*\*(.*?)\*\*/g, '<strong style="color:#60a5fa;">$1</strong>').replace(/\n/g, '<br>');
+}
+
+// ===== ESTILOS SCROLLBAR =====
+const s = document.createElement('style');
+s.textContent = '#eli-messages::-webkit-scrollbar{width:6px;}#eli-messages::-webkit-scrollbar-track{background:#0f172a;}#eli-messages::-webkit-scrollbar-thumb{background:#3b82f6;border-radius:3px;}';
+document.head.appendChild(s);
+</script>
 
 </body>
 </html>
-
-
